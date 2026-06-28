@@ -8,8 +8,8 @@ from html import escape
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(REPO, "site")
-ASSETS_SRC = os.path.join(REPO, "assets")
-REPORT_MD = os.path.join(REPO, "report", "report.md")
+# ASSETS_SRC removed
+REPORT_MD = os.path.join(REPO, "report.md")
 
 os.makedirs(OUT, exist_ok=True)
 
@@ -19,11 +19,9 @@ with open(REPORT_MD) as f:
 
 # ── Copy assets ─────────────────────────────────────────────────
 import shutil
-for fn in os.listdir(ASSETS_SRC):
-    shutil.copy2(os.path.join(ASSETS_SRC, fn), os.path.join(OUT, fn))
 
 # Copy report PDF
-shutil.copy2(os.path.join(REPO, "report", "report.pdf"), os.path.join(OUT, "report.pdf"))
+shutil.copy2(os.path.join(REPO, "report.pdf"), os.path.join(OUT, "report.pdf"))
 
 # ── CSS ─────────────────────────────────────────────────────────
 CSS = """
@@ -256,7 +254,7 @@ def chunk_to_html(chunk):
         elif stripped.startswith("\\includegraphics"):
             m = re.search(r'\{([^}]+)\}', stripped)
             if m:
-                src = m.group(1).replace("./img/", "assets/").replace("img/", "")
+                src = m.group(1).replace("./img/", "").replace("img/", "")
                 html += f'<figure><img src="{src}" style="max-width:100%;border-radius:6px;margin:1rem 0" /></figure>\n'
         elif stripped.startswith("\\noindent\\textbf{"):
             html += f"<p>{fmt(stripped[12:])}</p>\n"
