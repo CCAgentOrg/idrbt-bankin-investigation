@@ -70,3 +70,4 @@ For inquiries: Cashless Consumer via CERT-In coordination channels
 ---
 
 *Published under responsible disclosure principles. User PII, bcrypt hashes, and sensitive data not published.*
+## Deploy
