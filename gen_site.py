@@ -32,8 +32,9 @@ TR_EN = {
     "subtitle": "33+ unauthenticated API endpoints exposed 5,576 bank employees' credentials <span class='nowrap'>for over a year.</span>",
     "lead": "India's <tt>.bank.in</tt> was RBI's flagship anti-phishing initiative — a domain suffix meant to be a trust anchor citizens could rely on. Instead, the very portal that issues these banking domains leaked every credential it held.",
     "p1": "The IDRBT Domain Registration Portal (<tt>registrar.idrbt.ac.in</tt>) — the exclusive registrar for India's <tt>.bank.in</tt> banking namespace — exposed its entire REST API via <strong>33+ unauthenticated endpoints</strong>. Anyone with <tt>curl</tt> could retrieve the bcrypt password hashes, mobile numbers, email addresses, login IPs, and device fingerprints of all <strong>5,576 bank employees</strong> trusted with managing India's banking domains.",
-    "p2": "The portal was built by <strong>IKCON Technologies</strong> without any public tender, in violation of IDRBT's own procurement handbook. IKCON employees held 22 accounts including 3 with global Super Admin access. Of the <strong>1,497 registered domains</strong>, only <strong>6.9%</strong> matched across RBI's IFSC database and DICGC insurance records.",
-    "callout_text": "The vulnerability was reported to CERT-In within 25 minutes of discovery (Jun 8, 05:30 UTC) and confirmed fixed by IDRBT on <strong>June 25, 2026</strong>. The exposed endpoints are no longer accessible.",
+    "p2": "The portal was built by <strong>IKCON Technologies</strong> without any public tender, in violation of IDRBT's own procurement handbook. IKCON employees held 22 accounts including 3 with global Super Admin access.",
+    "callout_text": "The vulnerability was reported to CERT-In (Jun 8, 05:30 UTC) and confirmed fixed by IDRBT on <strong>June 25, 2026</strong>. The exposed endpoints are no longer accessible.",
+    "eli5": "Think of <tt>.bank.in</tt> as a special padlock RBI put on every bank website so you know it's real. This investigation found that the padlock maker's own system was leaking all the keys — and the report explains how, why it matters, and what's still broken.",
     "h2_data": "Open Data",
     "h2_links": "Links",
     "dl_report": "📄 Download Full Report (PDF)",
@@ -58,8 +59,9 @@ TR_HI = {
     "subtitle": "33+ असुरक्षित API ने 5,576 बैंक कर्मचारियों के क्रेडेंशियल्स को एक वर्ष से अधिक समय तक उजागर किया",
     "lead": "भारत का <tt>.bank.in</tt> RBI का प्रमुख एंटी-फिशिंग प्रयास था — एक डोमेन सफिक्स जो नागरिकों के लिए विश्वास एंकर बनना था। इसके बजाय, इन बैंकिंग डोमेन को जारी करने वाला पोर्टल ही अपने सभी क्रेडेंशियल्स लीक कर रहा था।",
     "p1": "IDRBT डोमेन रजिस्ट्रेशन पोर्टल (<tt>registrar.idrbt.ac.in</tt>) — भारत के <tt>.bank.in</tt> बैंकिंग नेमस्पेस का एकमात्र रजिस्ट्रार — ने <strong>33+ अनऑथेंटिकेटेड एंडपॉइंट्स</strong> के माध्यम से अपनी पूरी REST API उजागर कर दी। <tt>curl</tt> वाला कोई भी व्यक्ति भारत के बैंकिंग डोमेन के प्रबंधन के लिए जिम्मेदार <strong>5,576 बैंक कर्मचारियों</strong> के bcrypt पासवर्ड हैश, मोबाइल नंबर, ईमेल पते और लॉगिन IP प्राप्त कर सकता था।",
-    "p2": "पोर्टल <strong>IKCON Technologies</strong> द्वारा बिना किसी सार्वजनिक निविदा के बनाया गया, जो IDRBT की अपनी क्रय पुस्तिका का उल्लंघन है। IKCON के 22 कर्मचारी खाते थे जिनमें 3 ग्लोबल सुपर एडमिन एक्सेस वाले थे। <strong>1,497 पंजीकृत डोमेन</strong> में से केवल <strong>6.9%</strong> RBI के IFSC डेटाबेस और DICGC बीमा रिकॉर्ड से मेल खाते थे।",
-    "callout_text": "कमजोरी की सूचना खोज के 25 मिनट के भीतर (8 जून, 05:30 UTC) CERT-In को दी गई और IDRBT द्वारा <strong>25 जून 2026</strong> को ठीक होने की पुष्टि की गई। उजागर एंडपॉइंट अब सुलभ नहीं हैं।",
+    "p2": "पोर्टल <strong>IKCON Technologies</strong> द्वारा बिना किसी सार्वजनिक निविदा के बनाया गया, जो IDRBT की अपनी क्रय पुस्तिका का उल्लंघन है। IKCON के 22 कर्मचारी खाते थे जिनमें 3 ग्लोबल सुपर एडमिन एक्सेस वाले थे।",
+    "callout_text": "कमजोरी की सूचना CERT-In को (8 जून, 05:30 UTC) दी गई और IDRBT द्वारा <strong>25 जून 2026</strong> को ठीक होने की पुष्टि की गई। उजागर एंडपॉइंट अब सुलभ नहीं हैं।",
+    "eli5": "<tt>.bank.in</tt> को एक विशेष ताले की तरह समझें जो RBI ने हर बैंक वेबसाइट पर लगाया है ताकि आप जान सकें कि यह असली है। इस जांच में पाया गया कि ताले बनाने वाले की अपनी प्रणाली सभी चाबियाँ लीक कर रही थी — और रिपोर्ट बताती है कि कैसे, क्यों यह मायने रखता है, और अभी भी क्या टूटा हुआ है।",
     "h2_data": "खुला डेटा",
     "h2_links": "लिंक",
     "dl_report": "📄 पूरी रिपोर्ट डाउनलोड करें (PDF)",
@@ -84,8 +86,9 @@ TR_TA = {
     "subtitle": "33+ அங்கீகாரமற்ற API எண்ட்பாயின்ட்கள் 5,576 வங்கி ஊழியர்களின் கிரெடென்ஷியல்களை ஒரு வருடத்திற்கும் மேலாக வெளிப்படுத்தின",
     "lead": "இந்தியாவின் <tt>.bank.in</tt> என்பது RBIயின் முதன்மையான எதிர்ப்பு ஃபிஷிங் முயற்சியாகும் — குடிமக்கள் நம்பக்கூடிய ஒரு நம்பிக்கை நங்கூரமாக இருக்க வேண்டிய டொமைன் பின்னொட்டு. அதற்கு பதிலாக, இந்த வங்கி டொமைன்களை வழங்கும் போர்டலே தான் வைத்திருந்த ஒவ்வொரு கிரெடென்ஷியலையும் கசியவிட்டது.",
     "p1": "IDRBT டொமைன் பதிவு போர்டல் (<tt>registrar.idrbt.ac.in</tt>) — இந்தியாவின் <tt>.bank.in</tt> வங்கி நேம்ஸ்பேஸின் பிரத்யேக பதிவாளர் — <strong>33+ அங்கீகாரமற்ற எண்ட்பாயின்ட்கள்</strong> மூலம் அதன் முழு REST API ஐ வெளிப்படுத்தியது. <tt>curl</tt> உள்ள எவரும் இந்தியாவின் வங்கி டொமைன்களை நிர்வகிக்கும் <strong>5,576 வங்கி ஊழியர்களின்</strong> bcrypt கடவுச்சொல் ஹாஷ்கள், மொபைல் எண்கள், மின்னஞ்சல் முகவரிகள் மற்றும் உள்நுழைவு IPகளைப் பெற முடிந்தது.",
-    "p2": "இந்த போர்ட்டல் <strong>IKCON டெக்னாலஜிஸ்</strong> நிறுவனத்தால் எந்த பொது டெண்டரும் இன்றி உருவாக்கப்பட்டது, IDRBT இன் சொந்த கொள்முதல் கையேட்டை மீறி. IKCON ஊழியர்களுக்கு 22 கணக்குகள் இருந்தன, அவற்றில் 3 உலகளாவிய சூப்பர் அட்மின் அணுகலுடன். <strong>1,497 பதிவு செய்யப்பட்ட டொமைன்களில்</strong>, RBI இன் IFSC தரவுத்தளம் மற்றும் DICGC காப்பீட்டு பதிவுகளுடன் <strong>6.9%</strong> மட்டுமே பொருந்தின.",
-    "callout_text": "இந்த பாதிப்பு கண்டுபிடிக்கப்பட்ட 25 நிமிடங்களுக்குள் (ஜூன் 8, 05:30 UTC) CERT-In க்கு தெரிவிக்கப்பட்டது, மேலும் IDRBT ஆல் <strong>ஜூன் 25, 2026</strong> அன்று சரி செய்யப்பட்டது. வெளிப்பட்ட எண்ட்பாயின்ட்கள் இனி அணுக முடியாது.",
+    "p2": "இந்த போர்ட்டல் <strong>IKCON டெக்னாலஜிஸ்</strong> நிறுவனத்தால் எந்த பொது டெண்டரும் இன்றி உருவாக்கப்பட்டது, IDRBT இன் சொந்த கொள்முதல் கையேட்டை மீறி. IKCON ஊழியர்களுக்கு 22 கணக்குகள் இருந்தன, அவற்றில் 3 உலகளாவிய சூப்பர் அட்மின் அணுகலுடன்.",
+    "callout_text": "இந்த பாதிப்பு CERT-In க்கு (ஜூன் 8, 05:30 UTC) தெரிவிக்கப்பட்டது, மேலும் IDRBT ஆல் <strong>ஜூன் 25, 2026</strong> அன்று சரி செய்யப்பட்டது. வெளிப்பட்ட எண்ட்பாயின்ட்கள் இனி அணுக முடியாது.",
+    "eli5": "<tt>.bank.in</tt> என்பது RBI ஒவ்வொரு வங்கி இணையதளத்திலும் பொருத்திய ஒரு சிறப்பு பூட்டு போன்றது — நீங்கள் உண்மையான தளத்தில்தான் இருக்கிறீர்கள் என்பதை உறுதிப்படுத்த. இந்த விசாரணை கண்டுபிடித்தது: அந்த பூட்டை தயாரிக்கும் நிறுவனத்தின் சொந்த அமைப்பே அனைத்து சாவிகளையும் கசியவிட்டுக்கொண்டிருந்தது — எப்படி, ஏன் இது முக்கியமானது, இன்னும் என்ன உடைந்துள்ளது என்பதை அறிக்கை விளக்குகிறது.",
     "h2_data": "திறந்த தரவு",
     "h2_links": "இணைப்புகள்",
     "dl_report": "📄 முழு அறிக்கையைப் பதிவிறக்கவும் (PDF)",
@@ -230,9 +233,11 @@ footer{padding:32px 0;text-align:center;color:#bbb;font-size:.75rem}
 <section>
 <p data-i18n="lead">India's <tt>.bank.in</tt> was RBI's flagship anti-phishing initiative — a domain suffix meant to be a trust anchor citizens could rely on. Instead, the very portal that issues these banking domains leaked every credential it held.</p>
 <p data-i18n="p1">The IDRBT Domain Registration Portal (<tt>registrar.idrbt.ac.in</tt>) — the exclusive registrar for India&rsquo;s <tt>.bank.in</tt> banking namespace — exposed its entire REST API via <strong>33+ unauthenticated endpoints</strong>. Anyone with <tt>curl</tt> could retrieve the bcrypt password hashes, mobile numbers, email addresses, login IPs, and device fingerprints of all <strong>5,576 bank employees</strong> trusted with managing India&rsquo;s banking domains.</p>
-<p data-i18n="p2">The portal was built by <strong>IKCON Technologies</strong> without any public tender, in violation of IDRBT&rsquo;s own procurement handbook. IKCON employees held 22 accounts including 3 with global Super Admin access. Of the <strong>1,497 registered domains</strong>, only <strong>6.9%</strong> matched across RBI&rsquo;s IFSC database and DICGC insurance records.</p>
+<p data-i18n="p2">The portal was built by <strong>IKCON Technologies</strong> without any public tender, in violation of IDRBT&rsquo;s own procurement handbook. IKCON employees held 22 accounts including 3 with global Super Admin access.</p>
 
-<div class="callout" data-i18n="callout_text">The vulnerability was reported to CERT-In within 25 minutes of discovery (Jun 8, 05:30 UTC) and confirmed fixed by IDRBT on <strong>June 25, 2026</strong>. The exposed endpoints are no longer accessible.</div>
+<p data-i18n="eli5">Think of <tt>.bank.in</tt> as a special padlock RBI put on every bank website so you know it's real. This investigation found that the padlock maker's own system was leaking all the keys — and the report explains how, why it matters, and what's still broken.</p>
+
+<div class="callout" data-i18n="callout_text">The vulnerability was reported to CERT-In (Jun 8, 05:30 UTC) and confirmed fixed by IDRBT on <strong>June 25, 2026</strong>. The exposed endpoints are no longer accessible.</div>
 </section>
 
 <!-- Download -->
