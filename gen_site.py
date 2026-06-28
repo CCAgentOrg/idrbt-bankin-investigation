@@ -48,6 +48,7 @@ TR_EN = {
     "ln_code": "💻 Source Code",
     "ln_audit": "🔍 Daily Audit Feed",
     "ln_archive": "📋 Evidence Archive",
+    "ln_llms": "🤖 LLMs.txt",
     "about_title": "CashlessConsumer",
     "about_text": "A consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society. This investigation follows a consistent methodology: public records, OSINT, RTI, and responsible disclosure — no hacking, no stolen data, no adversarial techniques.",
     "about_ref": "Prior work: KillerLoanApps · BFIL Consent Scam · Fintech Governance RTI Program",
@@ -135,6 +136,7 @@ ALL_LANGS = {
   "ln_code": "💻 Source Code",
   "ln_audit": "🔍 Daily Audit Feed",
   "ln_archive": "📋 Evidence Archive",
+  "ln_llms": "🤖 LLMs.txt",
   "about_title": "CashlessConsumer",
   "about_text": "A consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society. This investigation follows a consistent methodology: public records, OSINT, RTI, and responsible disclosure — no hacking, no stolen data, no adversarial techniques.",
   "about_ref": "Prior work: KillerLoanApps · BFIL Consent Scam · Fintech Governance RTI Program",
@@ -452,6 +454,7 @@ HTML = r"""<!DOCTYPE html>
 <title>RBI's .bank.in Security Failure — CashlessConsumer</title>
 <meta name="description" content="33+ unauthenticated API endpoints on the IDRBT Domain Registration Portal exposed bcrypt password hashes for 5,576 bank employees. No public tender, no security baseline." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+<link rel="alternate" type="text/markdown" href="/llms.txt" title="LLM.txt - AI-friendly content">
 <style>
 /* ── Reset & Base ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -564,7 +567,8 @@ footer{padding:32px 0;text-align:center;color:#bbb;font-size:.75rem}
 <div class="links-row" data-i18n="h2_links">
 <a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation" data-i18n="ln_code">💻 Source Code</a>
 <a href="https://github.com/CCAgentOrg/bank-in-domains" data-i18n="ln_audit">🔍 Daily Audit Feed</a>
-<a href="https://zo.pub/cashlessconsumer/idrbt-bankin-security" data-i18n="ln_archive">📋 Evidence Archive</a>
+<a href="https://zo.pub/cashlessconsumer/idrbt-bankin-security" data-i18n="ln_archive">📋 Evidence</a>
+<a href="/llms.txt" data-i18n="ln_llms">🤖 LLMs.txt</a>
 </div>
 
 <!-- About -->
@@ -611,4 +615,44 @@ function setLang(code) {
 with open(os.path.join(OUT, "index.html"), "w", encoding="utf-8") as f:
     f.write(HTML)
 
+# ── Write llms.txt ─────────────────────────────────────────────
+LLMS = """# RBI's .bank.in Security Failure: From Trust Mandate to Security Vulnerability
+
+> CashlessConsumer's security investigation into the IDRBT Domain Registration Portal — the exclusive registry for India's .bank.in banking namespace under RBI purview. 33+ unauthenticated API endpoints exposed credentials of 5,576 bank employees for over a year. Built without public tender, without published security baseline, without VDP.
+
+## Key Facts
+
+- **33+ unauthenticated API endpoints** on registrar.idrbt.ac.in
+- **5,576 bank employees** with exposed bcrypt password hashes, mobile numbers, emails, login IPs, device fingerprints
+- **1,072 orphan Super Admin accounts** with top-level access to modify any bank's domain settings
+- **1,497 registered .bank.in domains** — only 6.9% verifiable against RBI IFSC and DICGC records
+- **Zero public tender** — Portal built by IKCON Technologies in single-source award, violating IDRBT's own procurement handbook
+- **IKCON held 22 accounts** including 3 with global Super Admin access
+- **80% of cooperative banks lack DNSSEC**, 40% have no DMARC, 47% no HSTS
+- **Vulnerable for over 13 months** (May 2025 – June 2026)
+- **Disclosure**: Discovered Jun 8, 2026 → Reported to CERT-In → Fixed Jun 25, 2026
+
+## Essential Links
+
+- [Full Report (PDF)](https://bankin-report.cashlessconsumer.in/report.pdf)
+- [Exposed Data & Datasets](https://bankin-report.cashlessconsumer.in/open-data/)
+- [Source Code](https://github.com/CCAgentOrg/idrbt-bankin-investigation)
+- [Daily Audit Feed](https://github.com/CCAgentOrg/bank-in-domains)
+- [Evidence Archive](https://zo.pub/cashlessconsumer/idrbt-bankin-security)
+
+## About
+
+Three governance failures: (1) No public tender — single-source award to IKCON violating IDRBT's own handbook. (2) No security baseline — unlike global .bank TLD, .bank.in enforces zero mandatory security controls. (3) No oversight — VAPT failed to detect 33+ open endpoints; no security researcher ever reviewed the system.
+
+## Attack Scenario
+
+Download 5,576 user records → spear-phish bank employees → crack weak bcrypt hashes → use orphan Super Admin accounts to hijack .bank.in domains → redirect to phishing sites with valid SSL + .bank.in suffix → steal customer credentials. No zero-days needed — only curl.
+
+## Open Data
+
+1,497 domains · 1,402 with NS · 95 unpublished · 1,535 billing records · 3,797 CT log entries. User records and orphan account data NOT published (contain PII/hashes)."""
+
+with open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8") as f:
+    f.write(LLMS)
+print(f"Wrote llms.txt ({len(LLMS)} chars)")
 print(f"Site generated: {os.path.join(OUT, 'index.html')} ({os.path.getsize(os.path.join(OUT, 'index.html'))} bytes)")
