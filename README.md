@@ -1,5 +1,17 @@
 # IDRBT .bank.in Security Investigation
 
+## Website
+
+The investigation is published as a static site at:
+https://bankin-report.cashlessconsumer.in
+
+To regenerate:
+```bash
+python3 gen_site.py
+```
+Output goes to `site/`. The site is automatically deployed to Cloudflare Pages
+via GitHub Actions on pushes to `main` (see `.github/workflows/deploy.yml`).
+
 ## Overview
 A responsible disclosure investigation into the IDRBT Domain Registration Portal (registrar.idrbt.ac.in) — the exclusive registry for .bank.in domains under RBI purview.
 

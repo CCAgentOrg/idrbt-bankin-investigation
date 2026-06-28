@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Trust Mandate to Security Debacle — IDRBT .bank.in Investigation</title>
+<meta name="description" content="A security investigation of the IDRBT .bank.in Domain Registration Portal: 33+ unauthenticated endpoints, 5,576 exposed bank employee credentials, systemic governance failures.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #0a0a0b; color: #e4e0d8; line-height: 1.7; font-size: 17px;
+}
+a { color: #f59e0b; text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { color: #f5f1e8; line-height: 1.3; }
+h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.6rem; margin: 2.5rem 0 1rem; border-bottom: 1px solid #222; padding-bottom: 0.4rem; }
+h3 { font-size: 1.2rem; margin: 1.8rem 0 0.8rem; color: #d8a657; }
+h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: #c9b99a; }
+p { margin: 0.8rem 0; }
+ul, ol { margin: 0.8rem 0; padding-left: 1.5rem; }
+li { margin: 0.4rem 0; }
+strong { color: #f5f1e8; }
+code, pre {
+  font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", "Fira Code", Consolas, monospace;
+  background: #1a1a1e; border-radius: 4px; font-size: 0.9em;
+}
+code { padding: 0.15em 0.35em; }
+pre { padding: 1rem; overflow-x: auto; margin: 1rem 0; border: 1px solid #2a2a2e; }
+table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+th, td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid #222; }
+th { background: #151518; color: #c9b99a; font-weight: 600; }
+tt { font-family: monospace; background: #1a1a1e; padding: 0.1em 0.3em; border-radius: 3px; }
+blockquote { border-left: 3px solid #f59e0b; margin: 1rem 0; padding: 0.5rem 1rem; background: #111114; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f11 0%, #1a1410 100%);
+  padding: 4rem 2rem; text-align: center; border-bottom: 1px solid #222;
+}
+.hero h1 { font-size: 2.8rem; max-width: 800px; margin: 0 auto 0.5rem; }
+.hero .subtitle { color: #aaa39a; font-size: 1.1rem; margin-bottom: 1.5rem; }
+.hero .stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0; }
+.hero .stat { background: rgba(28,26,22,0.7); border: 1px solid #333; border-radius: 8px; padding: 1rem 1.5rem; min-width: 120px; }
+.hero .stat .num { font-size: 1.8rem; font-weight: 700; color: #f59e0b; display: block; }
+.hero .stat .label { font-size: 0.8rem; color: #aaa39a; text-transform: uppercase; letter-spacing: 0.05em; }
+.hero .actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1.5rem; border-radius: 6px; font-weight: 600; font-size: 0.95rem;
+  transition: all 0.2s; cursor: pointer; border: none;
+}
+.btn-primary { background: #f59e0b; color: #0a0a0b; }
+.btn-primary:hover { background: #d48a0a; text-decoration: none; }
+.btn-outline { background: transparent; color: #e4e0d8; border: 1px solid #444; }
+.btn-outline:hover { border-color: #f59e0b; color: #f59e0b; text-decoration: none; }
+
+/* Nav */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,11,0.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222; padding: 0.6rem 1rem;
+  display: flex; gap: 0.4rem; flex-wrap: wrap;
+}
+nav a {
+  color: #aaa39a; font-size: 0.82rem; padding: 0.3rem 0.6rem; border-radius: 4px;
+  white-space: nowrap; transition: all 0.2s;
+}
+nav a:hover { color: #f59e0b; background: rgba(245,158,11,0.08); text-decoration: none; }
+
+/* Content */
+.container { max-width: 840px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+.tag {
+  display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px;
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.tag-critical { background: #7f1d1d; color: #fca5a5; }
+.tag-high { background: #78350f; color: #fcd34d; }
+.tag-medium { background: #1e3a5f; color: #93c5fd; }
+.tag-fixed { background: #14532d; color: #86efac; }
+.tag-issue { background: #4c1d95; color: #c4b5fd; }
+
+/* Grid cards */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.card {
+  background: #141416; border: 1px solid #222; border-radius: 8px; padding: 1.2rem;
+}
+.card h4 { margin-top: 0; color: #f5f1e8; }
+.card p { font-size: 0.95rem; color: #c9c3b8; }
+
+footer {
+  border-top: 1px solid #222; padding: 2rem; text-align: center; color: #666;
+  font-size: 0.9rem; margin-top: 3rem;
+}
+footer a { color: #aaa39a; }
+@media (max-width: 640px) {
+  h1 { font-size: 1.8rem; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero .actions { flex-direction: column; align-items: center; }
+  nav { overflow-x: auto; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>From Trust Mandate to Security&nbsp;Debacle</h1>
+  <p class="subtitle">A Security Investigation of the IDRBT <tt>.bank.in</tt> Domain Registry Portal</p>
+  <p style="color:#aaa39a;font-size:0.9rem">Srikanth L, CashlessConsumer &middot; June 2026 &middot; Responsible Disclosure</p>
+  <div class="stats">
+    <div class="stat"><span class="num">5,576</span><span class="label">Exposed Bank Employees</span></div>
+    <div class="stat"><span class="num">33+</span><span class="label">Unauthenticated Endpoints</span></div>
+    <div class="stat"><span class="num">1,072</span><span class="label">Orphan Super Admins</span></div>
+    <div class="stat"><span class="num">6.9%</span><span class="label">Domains Verified</span></div>
+  </div>
+  <div class="actions">
+    <a href="report.pdf" class="btn btn-primary">&#11015; Download Full PDF Report</a>
+    <a href="#eli5" class="btn btn-outline">&#9660; Quick Summary</a>
+  </div>
+</header>
+
+<nav><a href="#eli5">TL;DR</a>
+<a href="#introduction">Intro</a>
+<a href="#comparison">Comparison</a>
+<a href="#timeline">Timeline</a>
+<a href="#impact">Impact</a>
+<a href="#scenarios">Scenarios</a>
+<a href="#triangulation">Triangulation</a>
+<a href="#systemic">Issues</a>
+<a href="#methodology">Methodology</a>
+<a href="#recommendations">Recommendations</a>
+<a href="#opendata">Open Data</a>
+<a href="#conclusion">Conclusion</a>
+<a href="#disclosure">Disclosure</a>
+<a href="#references">Sources</a>
+<a href="#glossary">Glossary</a>
+<a href="#about">About</a></nav>
+
+<main class="container">
+
+<section id="eli5">
+<h2>Explain It Like I'm Five</h2>
+<p>(ELI5)</p>
+<h2>What happened?</h2>
+<p>India's central bank (RBI) created a special internet address ending in <tt>.bank.in</tt> so that people could tell real bank websites apart from fake ones. The idea was good: if a website ends in <tt>.bank.in</tt>, you should be able to trust it's a genuine bank &mdash; like seeing a government stamp on a document.</p>
+<p>The company in charge of handing out these special addresses (IDRBT) built a website to manage them. But that website was left wide open. Anyone in the world &mdash; with no password, no login, nothing &mdash; could look up the private details of thousands of bank employees: their email addresses, phone numbers, and scrambled versions of their passwords. For over a year.</p>
+<h2>Why should I care?</h2>
+<li>xtbf{Your money could be at risk.</tt> If a bad actor had used this leak to take over a bank's website, they could have shown you a fake login page that looked 100\% real &mdash; and stolen your username, password, and OTP. This is how people lose their life savings to phishing.</li>
+<li>xtbf{The &rdquo;trust stamp&rdquo; was broken.</tt> The whole point of <tt>.bank.in</tt> was that seeing it means &rdquo;this is safe.&rdquo; But the office issuing the stamps was itself unlocked. So the guarantee you were told to rely on wasn't actually reliable.</li>
+<li>xtbf{Small banks are the weakest.</tt> Many cooperative banks (where ordinary people, farmers, and small businesses keep their money) run their websites on cheap foreign servers with almost no security. They're easy targets.</li>
+<li>xtbf{It was fixed, but the system wasn't.</tt> The open door is now closed. But the deeper problems &mdash; no rules forcing banks to use basic security, no proper checks, no transparency in how this was built &mdash; are still there.</li>
+</ul>
+<h2>The short version</h2>
+<p>Someone left the keys to India's banking &rdquo;trusted zone&rdquo; under the doormat for over a year. A researcher found it, reported it quietly, and it's now locked. But the house itself still needs better locks, alarm systems, and rules about who gets to build the next one.</p>
+
+</section>
+
+<section id="introduction">
+<h2>Introduction</h2>
+<p>On February 7, 2025, the Reserve Bank of India announced the creation of <tt>.bank.in</tt> &mdash; a dedicated Internet domain namespace for Indian banks, managed by the Institute for Development and Research in Banking Technology (IDRBT). The intent was straightforward: create a &ldquo;trusted zone&rdquo; where citizens could verify they were visiting a legitimate bank website.</p>
+<p>A <tt>.bank.in</tt> domain is supposed to be the digital equivalent of a bank's physical branch &mdash; you see the name on the door, you know it's real. The RBI circular (RBI/2025-26/28, April 22, 2025) mandated that all scheduled commercial banks, cooperative banks, and regional rural banks migrate to <tt>.bank.in</tt> domains.</p>
+<p>## Why Domain Trust Matters</p>
+<p>When a citizen types <tt>sbi.bank.in</tt> into their browser, the <tt>.bank.in</tt> suffix serves as a trust anchor. It answers one question: &ldquo;Is this website genuinely operated by the entity it claims to be?&rdquo;</p>
+<p>This trust anchor is critical because:</p>
+</ul>
+<ul>
+<li>xtbf{Phishing defense:</tt> Scammers can register <tt>sbi-secure-login.com</tt> easily, but they should not be able to register <tt>sbi.bank.in</tt>. The <tt>.bank.in</tt> namespace is exclusive to verified banks.</li>
+<li>xtbf{Consumer confidence:</tt> The RBI stamp of approval on the domain gives citizens confidence that they are on a legitimate banking platform.</li>
+<li>xtbf{Regulatory oversight:</tt> A managed namespace enables RBI to enforce security standards across all banking domains.</li>
+</ul>
+<p>However, domain trust is only as strong as the controls at the registry. If the registry itself has weak authentication, unpatched vulnerabilities, and no enforcement of baseline security, the trust anchor is compromised.</p>
+
+</section>
+
+<section id="comparison">
+<h2>Domain Trust: <tt>.bank</tt> vs <tt>.bank.in</tt></h2>
+
+</section>
+
+<section id="timeline">
+<h2>Disclosure Timeline</h2>
+<table>
+<p><strong>Date</tt> & <strong>Event</tt> \\</p>
+<tr><td>\endfoot</td></tr>
+<tr><td>Apr 8, 2026</td><td>IDRBT publishes Limited RFP for VAPT of its IT infrastructure (limited tender, not open). \\</td></tr>
+<tr><td>Feb 7, 2025</td><td>RBI announces <tt>.bank.in</tt> namespace in bi-monthly monetary policy statement. \\</td></tr>
+<tr><td>Apr 22, 2025</td><td>RBI circular RBI/2025-26/28 &mdash; formal mandate for <tt>.bank.in</tt> adoption by all scheduled commercial banks, cooperative banks, and RRBs. \\</td></tr>
+<tr><td>May 2025</td><td>IDRBT Domain Registration Portal (<a href="registrar.idrbt.ac.in</tt>) launched. Portal developed by IKCON Technologies without visible public tender process. \\</td></tr>
+<tr><td>Jun 8, 2026 05:07 UTC</td><td>CashlessConsumer discovers first unauthenticated user database endpoint during routine OSINT scan of <tt>.bank.in</tt> infrastructure. \\</td></tr>
+<tr><td>Jun 8, 2026 05:30 UTC</td><td>Initial responsible disclosure report filed with CERT-In (<tt>incident@cert-in.org.in</tt>). \\</td></tr>
+<tr><td>Jun 8, 2026 06:30 UTC</td><td>Discovery of unauthenticated invoice and billing endpoints (1,535 records). \\</td></tr>
+<tr><td>Jun 8, 2026 07:30 UTC</td><td>Updated report filed with CERT-In documenting orphan users (1,072), phantom domains, DSC proxy exposure, and extended endpoint enumeration. \\</td></tr>
+<tr><td>Jun 9, 2026</td><td>CERT-In assigns acknowledgement reference <tt>CERTIn-62780526</tt> and confirms receipt of disclosure. \\</td></tr>
+<tr><td>Jun 25, 2026</td><td>CERT-In confirms vulnerability has been fixed by IDRBT (reference: <tt>CERTIn-62780526</tt>). \\</td></tr>
+</table>
+
+</section>
+
+<section id="impact">
+<h2>Impact Assessment</h2>
+<p>5,576 unique users have bcrypt password hashes exposed across multiple unauthenticated endpoints. Weak passwords (common for inter-bank portals) can be cracked offline. Affects employees of Indian banks, cooperative banks, and financial institutions.</p>
+<p>## 2. Account Takeover Risk [HIGH]</p>
+<p>With recovered credentials, attackers can log in to the portal and manage domain registrations for .IN banking domains, DNS settings, and billing. Domain hijacking could redirect banking traffic.</p>
+<p>## 3. Phishing at Scale [HIGH]</p>
+<p>Exact user list, mobile numbers, email addresses, organization names, and invoice context enable highly targeted spear-phishing against banking staff.</p>
+<p>## 4. Domain Hijacking Risk [HIGH]</p>
+<p>With portal access, an attacker could transfer domain registrations, change DNS records to redirect banking traffic, or modify billing information.</p>
+<p>## 5. Reputational Damage [MEDIUM]</p>
+<p>The national banking domain registrar under RBI purview leaking user data and financial records undermines trust in India's banking digital infrastructure.</p>
+<p>## 6. Systemic Weakness [MEDIUM]</p>
+<p>No mandatory DMARC, DNSSEC, HSTS, or CAA enforcement. The global <tt>.bank</tt> TLD requires all of these. India's <tt>.bank.in</tt> requires none.</p>
+
+</section>
+
+<section id="scenarios">
+<h2>Attack Scenarios</h2>
+<p>: What If a Bad Actor Had Found This First?</p>
+<p>The vulnerability documented in this report was discovered and responsibly disclosed within 25 minutes. But the portal had been live for over 13 months. Below are realistic attack chains a malicious actor could have executed &mdash; each one using only the data already accessible through the unauthenticated endpoints.</p>
+<p>## Scenario 1: Phishing at Scale</p>
+<p><strong>Time required:</tt> Under an hour.</p>
+<p>An attacker downloads the full user database (5,461 records) containing names, email addresses, mobile numbers, and organization names. Each record identifies exactly which bank employee manages which bank's domain registration. The attacker crafts personalised spear-phishing emails:</p>
+<li>&ldquo;Dear [Name], your bank's .bank.in domain registration is expiring. Click here to renew.&rdquo; &mdash; sent to the exact person responsible.</li>
+<li>&ldquo;Dear [Name], IDRBT requires re-verification of your DSC. Use this link.&rdquo; &mdash; sent with the recipient's correct bank name, designation, and phone number.</li>
+</ul>
+<p>These emails would appear legitimate because they contain correct internal details only the real IDRBT portal should know. A single compromised credential would give the attacker authenticated access to the portal.</p>
+<p>## Scenario 2: Domain Hijacking via Credential Theft</p>
+<p><strong>Time required:</tt> A few days to weeks, depending on password strength.</p>
+<p>The exposed bcrypt hashes include those of 1,072 orphan Super Admin accounts &mdash; accounts with no organisation association, meaning they can access any bank's domain settings. Even bcrypt can be cracked for weak passwords. A bank employee whose password is something like <tt>password123</tt> or <tt>bank@2025</tt> would have their hash cracked in hours.</p>
+<p>With Super Admin access, an attacker can:</p>
+<li>Transfer any <tt>.bank.in</tt> domain to a different registrar</li>
+<li>Change DNS records to point the bank's domain to a phishing server</li>
+<li>Modify the bank's contact email and billing information</li>
+<li>Lock legitimate bank administrators out of their own domain</li>
+</ul>
+<p>## Scenario 3: The Invisible Redirect</p>
+<p><strong>Time required:</tt> Minutes with portal access.</p>
+<p>An attacker with portal credentials changes the A record for <tt>sirsadccb.bank.in</tt> (a real cooperative bank) from the legitimate server IP to a phishing site hosted on a cheap overseas server. The SSL certificate on the phishing site is obtained via Let's Encrypt &mdash; free, automated, and requiring no identity verification. Since <tt>.bank.in</tt> does not mandate EV/OV certificates or Certificate Authority Authorization, the browser shows a green padlock next to the fake site.</p>
+<p>A customer checking their balance sees a page that looks identical to their bank's website. They enter their username, password, and OTP. The attacker now has everything needed to drain their account. The customer has no way to know &mdash; every visible signal (the <tt>.bank.in</tt> domain, the padlock icon, the familiar layout) tells them this is legitimate.</p>
+<p>## Scenario 4: Insider Threat Amplification</p>
+<p><strong>Time required:</tt> Instant.</p>
+<p>The exposed data includes device fingerprints and login IP addresses of every registered user. An attacker can map which employees have Super Admin access versus regular user access, which organisations have the weakest security postures (cooperative banks with minimal IT staff), and which employees have not logged in recently (orphaned or stale accounts ripe for takeover).</p>
+<p>This intelligence would allow a nation-state actor or organised cybercrime group to target the weakest link in the trust chain with surgical precision.</p>
+<p>## Key Takeaway</p>
+<p>None of these scenarios required exploiting a zero-day, bypassing a firewall, or writing a single line of exploit code. The attacker only needed <tt>curl</tt>. The data was already public. The only reason these scenarios did not materialise is that CashlessConsumer found the vulnerability first and reported it responsibly &mdash; before any malicious actor did.</p>
+
+</section>
+
+<section id="triangulation">
+<h2>Domain Triangulation</h2>
+<p>IDRBT's database of registered <tt>.bank.in</tt> domains was cross-referenced against two authoritative datasets:</p>
+</ul>
+<ul>
+<li>xtbf{RBI IFSC database</tt> &mdash; 1,510 bank codes for scheduled commercial banks, cooperative banks, and RRBs</li>
+<li>xtbf{DICGC insured banks list</tt> &mdash; 1,933 banks covered by deposit insurance</li>
+</ul>
+<p>## Results</p>
+<table>
+<tr><td>Matched: Domain + IFSC + DICGC</td><td>104</td><td>6.9\% \\</td></tr>
+<tr><td>Matched: Domain + IFSC only</td><td>5</td><td>0.3\% \\</td></tr>
+<tr><td>Matched: Domain + DICGC only</td><td>27</td><td>1.8\% \\</td></tr>
+<tr><td>Unmatched: Domain only</td><td>1,356</td><td>90.6\% \\</td></tr>
+<p><strong>Total</tt> & <strong>1,497</tt> & \\</p>
+</table>
+<p>xtbf{A caveat on name matching.</tt> Cross-referencing these three datasets is harder than it looks. Banks use varying legal names across registries (e.g. &ldquo;State Bank of India&rdquo; vs &ldquo;SBI&rdquo;, cooperative banks with regional names in multiple scripts), the IDRBT domain list does not carry a canonical organisation identifier, and IFSC/DICGC records key off different naming conventions. A domain that fails to match is not necessarily fake or invalid &mdash; it may simply use a name the fuzzy-matching did not catch. The figures below should therefore be read as indicative findings rather than a precise count of illegitimate domains.</p>
+<p>\noindent The cross-reference surfaced the following categories:</p>
+<li>Cooperative banks registered in the IDRBT system but not in the IFSC database</li>
+<li>Test/phantom entities (VKTEST, IKCONTESTBANK, IDTMAY)</li>
+<li>Non-bank entities (housing finance companies, fintechs)</li>
+<li>Domains with no live DNS configuration (95 domains without NS records)</li>
+<li>UAT/test domains with active SSL certificates in CT logs</li>
+</ul>
+
+</section>
+
+<section id="systemic">
+<h2>Systemic Issues</h2>
+<p>Multiple test domains were found alongside real banks in the production database:</p>
+<li>xttt{vktest.bank.in</tt> &mdash; Phantom org with live NS records</li>
+<li>xttt{ikcontest-aug12.bank.in</tt> &mdash; IKCON test domain</li>
+<li>xttt{testtest23.bank.in</tt>, <tt>datatest98.bank.in</tt> &mdash; Gibberish test domains</li>
+<li>xttt{rbi.bank.in</tt> &mdash; Registered but not pointing to RBI's actual website</li>
+<li>xttt{jhgf@gmai.com</tt>, <tt>kjhghj@mgai.com</tt> &mdash; Gibberish email registrations</li>
+</ul>
+<p>These phantom domains are not just administrative noise &mdash; several have active SSL certificates in Certificate Transparency logs, confirming they went through the full domain validation pipeline.</p>
+<p>## No Public Tender</p>
+<p>No public tender, RFP, or contract award for the development of the Domain Registration Portal was found across:</p>
+<li>IDRBT's tenders page (90+ tenders spanning 2020-2027)</li>
+<li>MSTC eProcure portal</li>
+<li>GeM (Government e-Marketplace)</li>
+<li>General web search</li>
+</ul>
+<p>This gap becomes even more striking given that a separate Limited Request for Proposal for VAPT (Vulnerability Assessment and Penetration Testing) of IDRBT's IT infrastructure was published on April 8, 2026 at <a href="https://www.idrbt.ac.in/wp-content/uploads/2026/04/Limited-RFP-for-VAPT-of-IDRBT-IT-Infra-Apr-2026-V2.pdf</tt> &mdash; a limited, non-open tender just two months before the <tt>.bank.in</tt> portal vulnerabilities were discovered. The VAPT RFP itself was a limited tender, contradicting IDRBT's own procurement norms that mandate open tenders for security-critical work.</p>
+<p>The portal footer states &ldquo;Developed \\& Maintained by IDRBT&rdquo; but technical evidence shows development by \<strong>IKCON Technologies</tt> (Hyderabad), with 22 employee accounts in the system including 3 with global Super Admin access. IKCON's own public website lists the <tt>.bank.in</tt> registrar as a marquee client engagement and claims to have advised over 380 cooperative banks on domain migration <a href="https://www.ikcontech.com/our-story</tt>, while its core offerings (Unified Meeting Suite, ResolveGen ticketing system) are unrelated to banking domain security.</p>
+<h3>IDRBT's Own Security Claims Contradicted</h3>
+<p>The IDRBT Domain Registration Portal's Privacy Policy and Terms of Use, published on the same registrar portal, make explicit security representations that are directly contradicted by this investigation's findings:</p>
+<li>The Privacy Policy claims the portal &ldquo;has been placed in protected zones along with firewall and IPS protection&rdquo; &mdash; yet 33+ API endpoints were accessible without any authentication.</li>
+<li>It states the portal has been &ldquo;audited for known application-level vulnerabilities before launch&rdquo; &mdash; yet the unauthenticated user database endpoint was present from day one of the portal (May 2025).</li>
+<li>It asserts that &ldquo;all known vulnerability was addressed before launching the web application&rdquo; &mdash; yet bcrypt password hashes for 5,576 users were exposed for over 13 months.</li>
+<li>The Terms of Use state that &ldquo;IDRBT shall endeavor to ensure that the website is available and secure at all times&rdquo; &mdash; a commitment demonstrably broken.</li>
+</ul>
+<p>These documents remain live on the portal at the time of this report's publication <a href="https://registrar.idrbt.ac.in</tt>.</p>
+<p>## Data Residency Violations</p>
+<p>Multiple cooperative banks were found hosting their <tt>.bank.in</tt> websites on foreign servers:</p>
+<li>xtbf{United States:</tt> Sri Satya Sai DCCB, multiple cooperative banks on shared US hosting</li>
+<li>xtbf{Lithuania:</tt> <tt>sps.bank.in</tt> &mdash; bank email server in Amsterdam</li>
+<li>xtbf{Singapore:</tt> Routing via CDN edge nodes outside India</li>
+</ul>
+<p>This raises serious concerns about compliance with RBI data localization requirements and exposes cooperative bank customers to foreign jurisdiction risks.</p>
+<p>## Procurement \& Governance</p>
+<p>Beyond the technical vulnerabilities, an equally troubling picture emerges from how the <tt>.bank.in</tt> registry was procured, designed, and governed.</p>
+<p>### No Public Consultation on <tt>.bank.in</tt> Design</p>
+<p>RBI announced <tt>.bank.in</tt> in its bi-monthly monetary policy statement on February 7, 2025 &mdash; not through a consultation paper, draft circular for public comment, or any stakeholder engagement process. The formal circular (RBI/2025-26/28, April 22, 2025) was issued with immediate effect, giving banks barely six months to migrate. Unlike the global <tt>.bank</tt> TLD &mdash; which was developed over years through multi-stakeholder consultation involving the ABA, fTLD Registry, financial institutions, and security researchers &mdash; India's <tt>.bank.in</tt> was designed and mandated in near-total opacity. No green paper, white paper, or impact assessment was published.</p>
+<p>### IDRBT's Own Procurement Handbook &mdash; Violated for <tt>.bank.in</tt></p>
+<p>IDRBT literally wrote the book on public procurement. In 2015, it published <strong>\"IT Vendor Management: Principles \& Practices\"</tt> &mdash; a comprehensive 32-page handbook authored by Dr. G.R. Gangadharan (Assistant Professor, IDRBT) with a foreword by then-Director Dr. A.S. Ramasastri. It was meant to teach banks how to procure IT properly.</p>
+<p>IDRBT then violated multiple principles from its own handbook for the <tt>.bank.in</tt> portal:</p>
+<li>The handbook mandates open/global tender for purchases above a cut-off amount &mdash; no tender of any kind was found</li>
+<li>It requires notice in at least one national daily and the bank's website &mdash; zero public notice was issued</li>
+<li>It mandates financial and technical evaluation of vendors &mdash; IKCON had no prior banking application projects</li>
+<li>Deviations from procedure must be documented with logical reasons &mdash; no documentation of procurement decision exists</li>
+<li>Single tender only in exceptional cases with recorded justification &mdash; single-source award to IKCON with no justification</li>
+</ul>
+<p>The handbook itself warns: <em>\"If the buyer knows neither his/her requirements nor about vendors' capabilities or products, then the IT project is certain to fail.\"</tt></p>
+<p>### Academic Security Research &mdash; Published but Ignored</p>
+<p>IDRBT is primarily a research and training institute. Its academic staff have published multiple papers on domain security, DNSSEC deployment, and cybersecurity benchmarks for the banking sector. Yet none of this research appears to have informed the <tt>.bank.in</tt> implementation. The registry mandates none of the security controls that IDRBT's own researchers have argued for in peer-reviewed literature &mdash; no DNSSEC requirement, no DMARC enforcement, no EV/OV certificate mandate, no data residency verification. Research that could have shaped a secure-by-design registry was published, filed, and apparently ignored by the same institution.</p>
+<p>### Unnecessary Exposure of Internal Systems</p>
+<p>The <tt>.bank.in</tt> migration created a structural side effect that was entirely preventable: banks migrated far more than their public-facing websites. Certificate Transparency logs and the domain registration database reveal HRMS portals, payroll dashboards, employee self-service platforms, UAT instances, and staging environments all registered under <tt>.bank.in</tt> &mdash; each one publicly resolvable and carrying an SSL certificate that confirms domain validation.</p>
+<p>This is harmful in two ways. First, every such registration leaks metadata about a bank's internal technology stack: hosting providers, server software, certificate issuers, and subdomain naming conventions that reveal network topology. An attacker can enumerate HRMS platforms (typically running older, less frequently patched software), identify UAT instances (which may run unpatched code), and map the attack surface of a bank without sending a single packet past its production firewall.</p>
+<p>Second, the <tt>.bank.in</tt> suffix itself lends credibility to these systems. A bank employee receiving an email linking to <tt>hrms.sirsadccb.bank.in</tt> is far more likely to enter credentials than one linking to <tt>hrms.sirsadccb.com</tt>. The trust marker intended for citizens has become an attack vector against employees.</p>
+<p>A proper design review &mdash; the kind an open RFP or public consultation would have produced &mdash; would have anticipated this. The global <tt>.bank</tt> TLD explicitly limits registration to customer-facing banking services with strict subdomain controls. India's <tt>.bank.in</tt> has no such restrictions, and the oversight directly expands the attack surface of the banking sector.</p>
+<p>### What Should Have Happened</p>
+<p>A proper process would have included:</p>
+</ul>
+<ul>
+<li>A public consultation paper on <tt>.bank.in</tt> design inviting feedback from banks, security researchers, and the public</li>
+<li>An open tender for the domain registration portal with published evaluation criteria</li>
+<li>A published security baseline drawing on IDRBT's own academic research and global benchmarks like fTLD</li>
+<li>Regular independent security audits</li>
+<li>A vulnerability disclosure program</li>
+</ul>
+<p>\noindent None of these happened. India's banking namespace &mdash; meant to be a trust anchor &mdash; was built without the trust-building processes that public infrastructure deserves.</p>
+
+</section>
+
+<section id="methodology">
+<h2>Methodology</h2>
+<p>IDRBT's database of registered <tt>.bank.in</tt> domains was cross-referenced against two authoritative datasets:</p>
+</ul>
+<ul>
+<li>xtbf{RBI IFSC database</tt> &mdash; 1,510 bank codes for scheduled commercial banks, cooperative banks, and RRBs</li>
+<li>xtbf{DICGC insured banks list</tt> &mdash; 1,933 banks covered by deposit insurance</li>
+</ul>
+<p>## Results</p>
+<table>
+<tr><td>Matched: Domain + IFSC + DICGC</td><td>104</td><td>6.9\% \\</td></tr>
+<tr><td>Matched: Domain + IFSC only</td><td>5</td><td>0.3\% \\</td></tr>
+<tr><td>Matched: Domain + DICGC only</td><td>27</td><td>1.8\% \\</td></tr>
+<tr><td>Unmatched: Domain only</td><td>1,356</td><td>90.6\% \\</td></tr>
+<p><strong>Total</tt> & <strong>1,497</tt> & \\</p>
+</table>
+<p>xtbf{A caveat on name matching.</tt> Cross-referencing these three datasets is harder than it looks. Banks use varying legal names across registries (e.g. &ldquo;State Bank of India&rdquo; vs &ldquo;SBI&rdquo;, cooperative banks with regional names in multiple scripts), the IDRBT domain list does not carry a canonical organisation identifier, and IFSC/DICGC records key off different naming conventions. A domain that fails to match is not necessarily fake or invalid &mdash; it may simply use a name the fuzzy-matching did not catch. The figures below should therefore be read as indicative findings rather than a precise count of illegitimate domains.</p>
+<p>\noindent The cross-reference surfaced the following categories:</p>
+<li>Cooperative banks registered in the IDRBT system but not in the IFSC database</li>
+<li>Test/phantom entities (VKTEST, IKCONTESTBANK, IDTMAY)</li>
+<li>Non-bank entities (housing finance companies, fintechs)</li>
+<li>Domains with no live DNS configuration (95 domains without NS records)</li>
+<li>UAT/test domains with active SSL certificates in CT logs</li>
+</ul>
+<p># Systemic Issues</p>
+<p>## Test/Production Overlap</p>
+<p>Multiple test domains were found alongside real banks in the production database:</p>
+<li>xttt{vktest.bank.in</tt> &mdash; Phantom org with live NS records</li>
+<li>xttt{ikcontest-aug12.bank.in</tt> &mdash; IKCON test domain</li>
+<li>xttt{testtest23.bank.in</tt>, <tt>datatest98.bank.in</tt> &mdash; Gibberish test domains</li>
+<li>xttt{rbi.bank.in</tt> &mdash; Registered but not pointing to RBI's actual website</li>
+<li>xttt{jhgf@gmai.com</tt>, <tt>kjhghj@mgai.com</tt> &mdash; Gibberish email registrations</li>
+</ul>
+<p>These phantom domains are not just administrative noise &mdash; several have active SSL certificates in Certificate Transparency logs, confirming they went through the full domain validation pipeline.</p>
+<p>## No Public Tender</p>
+<p>No public tender, RFP, or contract award for the development of the Domain Registration Portal was found across:</p>
+<li>IDRBT's tenders page (90+ tenders spanning 2020-2027)</li>
+<li>MSTC eProcure portal</li>
+<li>GeM (Government e-Marketplace)</li>
+<li>General web search</li>
+</ul>
+<p>This gap becomes even more striking given that a separate Limited Request for Proposal for VAPT (Vulnerability Assessment and Penetration Testing) of IDRBT's IT infrastructure was published on April 8, 2026 at <a href="https://www.idrbt.ac.in/wp-content/uploads/2026/04/Limited-RFP-for-VAPT-of-IDRBT-IT-Infra-Apr-2026-V2.pdf</tt> &mdash; a limited, non-open tender just two months before the <tt>.bank.in</tt> portal vulnerabilities were discovered. The VAPT RFP itself was a limited tender, contradicting IDRBT's own procurement norms that mandate open tenders for security-critical work.</p>
+<p>The portal footer states &ldquo;Developed \\& Maintained by IDRBT&rdquo; but technical evidence shows development by \<strong>IKCON Technologies</tt> (Hyderabad), with 22 employee accounts in the system including 3 with global Super Admin access. IKCON's own public website lists the <tt>.bank.in</tt> registrar as a marquee client engagement and claims to have advised over 380 cooperative banks on domain migration <a href="https://www.ikcontech.com/our-story</tt>, while its core offerings (Unified Meeting Suite, ResolveGen ticketing system) are unrelated to banking domain security.</p>
+<h3>IDRBT's Own Security Claims Contradicted</h3>
+<p>The IDRBT Domain Registration Portal's Privacy Policy and Terms of Use, published on the same registrar portal, make explicit security representations that are directly contradicted by this investigation's findings:</p>
+<li>The Privacy Policy claims the portal &ldquo;has been placed in protected zones along with firewall and IPS protection&rdquo; &mdash; yet 33+ API endpoints were accessible without any authentication.</li>
+<li>It states the portal has been &ldquo;audited for known application-level vulnerabilities before launch&rdquo; &mdash; yet the unauthenticated user database endpoint was present from day one of the portal (May 2025).</li>
+<li>It asserts that &ldquo;all known vulnerability was addressed before launching the web application&rdquo; &mdash; yet bcrypt password hashes for 5,576 users were exposed for over 13 months.</li>
+<li>The Terms of Use state that &ldquo;IDRBT shall endeavor to ensure that the website is available and secure at all times&rdquo; &mdash; a commitment demonstrably broken.</li>
+</ul>
+<p>These documents remain live on the portal at the time of this report's publication <a href="https://registrar.idrbt.ac.in</tt>.</p>
+<p>## Data Residency Violations</p>
+<p>Multiple cooperative banks were found hosting their <tt>.bank.in</tt> websites on foreign servers:</p>
+<li>xtbf{United States:</tt> Sri Satya Sai DCCB, multiple cooperative banks on shared US hosting</li>
+<li>xtbf{Lithuania:</tt> <tt>sps.bank.in</tt> &mdash; bank email server in Amsterdam</li>
+<li>xtbf{Singapore:</tt> Routing via CDN edge nodes outside India</li>
+</ul>
+<p>This raises serious concerns about compliance with RBI data localization requirements and exposes cooperative bank customers to foreign jurisdiction risks.</p>
+<p>## Procurement \& Governance</p>
+<p>Beyond the technical vulnerabilities, an equally troubling picture emerges from how the <tt>.bank.in</tt> registry was procured, designed, and governed.</p>
+<p>### No Public Consultation on <tt>.bank.in</tt> Design</p>
+<p>RBI announced <tt>.bank.in</tt> in its bi-monthly monetary policy statement on February 7, 2025 &mdash; not through a consultation paper, draft circular for public comment, or any stakeholder engagement process. The formal circular (RBI/2025-26/28, April 22, 2025) was issued with immediate effect, giving banks barely six months to migrate. Unlike the global <tt>.bank</tt> TLD &mdash; which was developed over years through multi-stakeholder consultation involving the ABA, fTLD Registry, financial institutions, and security researchers &mdash; India's <tt>.bank.in</tt> was designed and mandated in near-total opacity. No green paper, white paper, or impact assessment was published.</p>
+<p>### IDRBT's Own Procurement Handbook &mdash; Violated for <tt>.bank.in</tt></p>
+<p>IDRBT literally wrote the book on public procurement. In 2015, it published <strong>\"IT Vendor Management: Principles \& Practices\"</tt> &mdash; a comprehensive 32-page handbook authored by Dr. G.R. Gangadharan (Assistant Professor, IDRBT) with a foreword by then-Director Dr. A.S. Ramasastri. It was meant to teach banks how to procure IT properly.</p>
+<p>IDRBT then violated multiple principles from its own handbook for the <tt>.bank.in</tt> portal:</p>
+<li>The handbook mandates open/global tender for purchases above a cut-off amount &mdash; no tender of any kind was found</li>
+<li>It requires notice in at least one national daily and the bank's website &mdash; zero public notice was issued</li>
+<li>It mandates financial and technical evaluation of vendors &mdash; IKCON had no prior banking application projects</li>
+<li>Deviations from procedure must be documented with logical reasons &mdash; no documentation of procurement decision exists</li>
+<li>Single tender only in exceptional cases with recorded justification &mdash; single-source award to IKCON with no justification</li>
+</ul>
+<p>The handbook itself warns: <em>\"If the buyer knows neither his/her requirements nor about vendors' capabilities or products, then the IT project is certain to fail.\"</tt></p>
+<p>### Academic Security Research &mdash; Published but Ignored</p>
+<p>IDRBT is primarily a research and training institute. Its academic staff have published multiple papers on domain security, DNSSEC deployment, and cybersecurity benchmarks for the banking sector. Yet none of this research appears to have informed the <tt>.bank.in</tt> implementation. The registry mandates none of the security controls that IDRBT's own researchers have argued for in peer-reviewed literature &mdash; no DNSSEC requirement, no DMARC enforcement, no EV/OV certificate mandate, no data residency verification. Research that could have shaped a secure-by-design registry was published, filed, and apparently ignored by the same institution.</p>
+<p>### Unnecessary Exposure of Internal Systems</p>
+<p>The <tt>.bank.in</tt> migration created a structural side effect that was entirely preventable: banks migrated far more than their public-facing websites. Certificate Transparency logs and the domain registration database reveal HRMS portals, payroll dashboards, employee self-service platforms, UAT instances, and staging environments all registered under <tt>.bank.in</tt> &mdash; each one publicly resolvable and carrying an SSL certificate that confirms domain validation.</p>
+<p>This is harmful in two ways. First, every such registration leaks metadata about a bank's internal technology stack: hosting providers, server software, certificate issuers, and subdomain naming conventions that reveal network topology. An attacker can enumerate HRMS platforms (typically running older, less frequently patched software), identify UAT instances (which may run unpatched code), and map the attack surface of a bank without sending a single packet past its production firewall.</p>
+<p>Second, the <tt>.bank.in</tt> suffix itself lends credibility to these systems. A bank employee receiving an email linking to <tt>hrms.sirsadccb.bank.in</tt> is far more likely to enter credentials than one linking to <tt>hrms.sirsadccb.com</tt>. The trust marker intended for citizens has become an attack vector against employees.</p>
+<p>A proper design review &mdash; the kind an open RFP or public consultation would have produced &mdash; would have anticipated this. The global <tt>.bank</tt> TLD explicitly limits registration to customer-facing banking services with strict subdomain controls. India's <tt>.bank.in</tt> has no such restrictions, and the oversight directly expands the attack surface of the banking sector.</p>
+<p>### What Should Have Happened</p>
+<p>A proper process would have included:</p>
+</ul>
+<ul>
+<li>A public consultation paper on <tt>.bank.in</tt> design inviting feedback from banks, security researchers, and the public</li>
+<li>An open tender for the domain registration portal with published evaluation criteria</li>
+<li>A published security baseline drawing on IDRBT's own academic research and global benchmarks like fTLD</li>
+<li>Regular independent security audits</li>
+<li>A vulnerability disclosure program</li>
+</ul>
+<p>\noindent None of these happened. India's banking namespace &mdash; meant to be a trust anchor &mdash; was built without the trust-building processes that public infrastructure deserves.</p>
+<p># Methodology</p>
+<p>All findings in this report were obtained using only passive and non-invasive techniques. No exploit was written, no payload was delivered, and no authentication was bypassed through active means.</p>
+<p>xtbf{Techniques used:</tt></p>
+<li>xtbf{Static decompilation:</tt> The Angular frontend JavaScript bundles were downloaded from the public URL and decompiled to reveal API endpoint paths, request/response schemas, and authentication logic. This is equivalent to a user viewing a website's source code.</li>
+<li>xtbf{Unauthenticated GET requests:</tt> Each discovered endpoint was accessed via HTTP GET with no authentication headers, tokens, or session cookies. No POST, PUT, DELETE, or PATCH requests were made. No data was modified or submitted.</li>
+<li>xtbf{Certificate Transparency log analysis:</tt> Public CT logs (crt.sh) were queried for all known <tt>.bank.in</tt> subdomains. This is a public, rate-limited API that requires no authentication.</li>
+<li>xtbf{DNS resolution checks:</tt> Standard <tt>dig</tt> and <tt>nslookup</tt> queries were used to verify domain delegation, name server configuration, DNSSEC status, and DMARC/SPF records.</li>
+<li>xtbf{HTTP header inspection:</tt> Live <tt>.bank.in</tt> domains were probed with standard HTTP HEAD/GET requests to check security header deployment (HSTS, CSP, X-Frame-Options). No content was downloaded beyond headers.</li>
+<li>xtbf{Geolocation via public APIs:</tt> Server IP addresses were checked against public geolocation databases (ip-api.com) to identify hosting jurisdictions.</li>
+<li>xtbf{Public source code analysis:</tt> The portal's frontend code was examined for hardcoded configuration, test credentials, and API path structures &mdash; all visible to any browser that loads the page.</li>
+</ul>
+<h2>Reproducible Verification</h2>
+<p>All findings can be independently verified using the following techniques:</p>
+<p>### Unauthenticated API Access</p>
+# Returns full user database --- no token required
+curl -s &#x27;https://registrar.idrbt.ac.in/api/dr/user/all&#x27;
+</pre>
+<p>### Phantom Domain Detection</p>
+# Check if registered domain has active DNS
+dig +short datatest98.bank.in A @8.8.8.8
+# Empty = registered but not published to NIXI
+</pre>
+<p>### Data Residency Check</p>
+domain=&quot;sirsadccb.bank.in&quot;
+ip=$(dig +short $domain A @8.8.8.8 | head -1)
+curl -s &quot;http://ip-api.com/json/$ip&quot; | jq &#x27;.country, .city&#x27;
+</pre>
+<h2>Ethical Boundaries</h2>
+<p><strong>Data used:</tt> Public APIs, CT logs, DNS, client-side source code. \\</p>
+<p><strong>Data NOT used:</tt> No password cracking, no stolen tokens, no injection, no brute force.</p>
+<p>xtbf{What was NOT done:</tt></p>
+<li>No brute force, injection, or privilege escalation</li>
+<li>No password cracking (bcrypt hashes were never extracted or processed offline)</li>
+<li>No phishing, social engineering, or MITM</li>
+<li>No port scanning or network-level reconnaissance</li>
+<li>No zero-day exploitation or fuzzing</li>
+<li>No data exfiltration &mdash; extracted data was never downloaded to persistent storage</li>
+</ul>
+<p>\noindent Every finding in this report can be independently reproduced by any researcher with <tt>curl</tt> and <tt>dig</tt>. No specialized tools, authenticated access, or exploit code is required. This is not a testament to sophisticated research &mdash; it is evidence of how fundamentally broken the access controls were.</p>
+
+</section>
+
+<section id="recommendations">
+<h2>Recommendations</h2>
+</ul>
+<ul>
+<li>Block ALL unauthenticated GET endpoints behind server-side authentication</li>
+<li>Implement server-side JWT validation on all API endpoints</li>
+</ul>
+<p>## Short-term</p>
+</ul>
+<ul>
+<li>Force password reset for all 5,576 affected users</li>
+<li>Purge soft-deleted user records containing PII</li>
+<li>Lock orphan Super Admin accounts</li>
+<li>Audit nginx access logs for potential data exfiltration</li>
+<li>Implement rate limiting and IP allowlisting at API gateway</li>
+<li>Disable Spring Boot Actuator on production</li>
+</ul>
+<p>## Long-term (Governance)</p>
+</ul>
+<ul>
+<li>DMARC <tt>p=reject</tt> enforcement for all <tt>.bank.in</tt> domains</li>
+<li>DNSSEC mandatory for all domain delegations</li>
+<li>HSTS preload submission for <tt>.bank.in</tt> TLD</li>
+<li>Mandatory EV/OV certificates for banking domains (minimum)</li>
+<li>Open security.txt, bug bounty, and vulnerability disclosure program</li>
+<li>Public RFP for all future registry development</li>
+<li>Weekly compliance scanning, annual security audit</li>
+<li>Data residency enforcement for cooperative banks</li>
+<li>Automated compliance scanning (following fTLD <tt>.bank</tt> model)</li>
+</ul>
+
+</section>
+
+<section id="opendata">
+<h2>Open Data</h2>
+<p>All non-sensitive datasets from this investigation are published for independent verification and further research. No PII, bcrypt hashes, or sensitive data is included in published datasets.</p>
+<table>
+<tr><td>Domains (<tt>domains.txt</tt>)</td><td>1,497</td><td>Yes \\</td></tr>
+<tr><td>Domains with NS (<tt>domains-with-ns.txt</tt>)</td><td>1,402</td><td>Yes \\</td></tr>
+<tr><td>Domains without NS (<tt>domains-without-ns.txt</tt>)</td><td>95</td><td>Yes \\</td></tr>
+<tr><td>Billing records (anonymized)</td><td>1,535</td><td>Yes \\</td></tr>
+<tr><td>Certificate transparency log</td><td>3,797</td><td>Yes \\</td></tr>
+<tr><td>User records (original leak)</td><td>5,461</td><td><strong>No &mdash; contains PII/hashes</tt> \\</td></tr>
+<tr><td>Orphan user records</td><td>1,072</td><td><strong>No &mdash; contains PII/hashes</tt> \\</td></tr>
+</table>
+<p>\noindent The domain list from this investigation feeds into the <strong>bank-in-domains</tt> project at <a href="https://github.com/CCAgentOrg/bank-in-domains</tt> &mdash; a daily automated audit of <tt>*.bank.in</tt> and parallel Indian financial TLDs. Every day at 02:30 UTC, it discovers new subdomains from Certificate Transparency logs, Wayback Machine, urlscan.io, and HackerTarget, then probes each one for DNS resolution, HTTPS reachability, HTTP status codes, and page titles. Results are published as CSV, JSONL, Parquet, and SQLite.</p>
+<p>\noindent This data enables the broader public to build their own monitoring tools &mdash; including uptime monitors like <a href="https://uptime.cashlessconsumer.in</tt> which tracks the live status of Indian banking and financial domains in near real-time. Any researcher, journalist, or concerned citizen can use the open data to independently verify which bank websites are operational and which have security gaps.</p>
+<p>\noindent Source code and scripts for all analysis: <a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation</tt></p>
+
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>The <tt>.bank.in</tt> namespace is a well-intentioned initiative to create a trusted zone for Indian banking. However, the investigation reveals fundamental gaps at every level of the trust chain:</p>
+</ul>
+<ul>
+<li>xtbf{The registry</tt> (IDRBT) had critical vulnerabilities in its domain registration portal, exposing the credentials and data of every bank employee registered in the system.</li>
+<li>xtbf{The registrar</tt> (IKCON Technologies) was appointed without public tender and had un-deprovisioned Super Admin access.</li>
+<li>xtbf{The security baseline</tt> is voluntary &mdash; unlike the global <tt>.bank</tt> TLD, India's <tt>.bank.in</tt> does not mandate DNSSEC, DMARC, HSTS, or CA Authorization.</li>
+<li>xtbf{Enforcement is absent</tt> &mdash; cooperative banks host customer-facing websites on foreign servers, use basic DV certificates, and have no email authentication.</li>
+<li>xtbf{Testing and production are not separated</tt> &mdash; phantom test domains, gibberish accounts, and UAT configurations coexist with real bank registrations.</li>
+</ul>
+<p><strong>The good news:</tt> CERT-In confirmed the vulnerability is fixed. The exposed endpoints are no longer accessible.</p>
+<p><strong>The concerning reality:</tt> The fix addresses the immediate API exposure but does not address the systemic issues documented in this report &mdash; the lack of mandatory security baselines, the absence of public procurement, the data residency gaps, or the phantom domain problem.</p>
+<p>xtbf{This report is published as a responsible disclosure.</tt> No exploit code or active attack paths are included. All data was obtained from publicly accessible APIs with no authentication bypass &mdash; no brute force, no injection, no privilege escalation was used.</p>
+<p>xtbf{Full evidence archive:</tt> <a href="https://zo.pub/cashlessconsumer/idrbt-bankin-security</tt> \\</p>
+<p>xtbf{Source code \& scripts:</tt> <a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation</tt> \\</p>
+<p>xtbf{Proof-of-concept video:</tt> <a href="https://zo.pub/cashlessconsumer/idrbt-poc-video</tt></p>
+
+</section>
+
+<section id="disclosure">
+<h2>Responsible Disclosure</h2>
+<p>This investigation was conducted under standard responsible disclosure principles.</p>
+<p>xtbf{Initial notification:</tt> June 8, 2026, 05:30 UTC &mdash; filed with CERT-In (<tt>incident@cert-in.org.in</tt>) within 25 minutes of discovery.</p>
+<p>xtbf{Subsequent filings:</tt> June 8, 2026, 07:30 UTC &mdash; extended findings including orphan users, phantom domains, and DSC proxy exposure.</p>
+<p>xtbf{Remediation confirmed:</tt> June 25, 2026 &mdash; CERT-In confirmed IDRBT has fixed the vulnerability.</p>
+<p>xtbf{Principles followed:</tt></p>
+<li>Full discovery timeline disclosed to CERT-In before publication</li>
+<li>No exploit code published</li>
+<li>No active customer data published (all PII redacted in any public datasets)</li>
+<li>All evidence shared privately with CERT-In for verification</li>
+<li>Publication delayed until remediation was confirmed</li>
+<li>No data exfiltration &mdash; extracted data was never downloaded to persistent storage</li>
+</ul>
+<p>\noindent The vulnerability was present for approximately 13 months (May 2025 -- June 2026). CERT-In's confirmation of the fix means the exposed endpoints are no longer accessible. However, we cannot confirm how long the exposure existed before discovery, or whether any malicious actor accessed the data during that period.</p>
+
+</section>
+
+<section id="references">
+<h2>References</h2>
+
+</section>
+
+<section id="glossary">
+<h2>Glossary</h2>
+<dl>
+<dt><tt>.bank.in</tt></dt><dd>A special internet domain ending reserved for Indian banks, managed by IDRBT under RBI's direction. Meant to signal &rdquo;this is a genuine bank website.&rdquo;</dd>
+<dt>API (Application Programming Interface)</dt><dd>A way for computer programs to talk to each other. Here, the registry's API was supposed to be private but was left public &mdash; like a bank vault with the door open.</dd>
+<dt>Bcrypt hash</dt><dd>A scrambled, one-way version of a password. Strong passwords are hard to unscramble; weak ones (like <tt>password123</tt>) can be cracked in seconds.</dd>
+<dt>CAA (Certification Authority Authorization)</dt><dd>A DNS record that says which companies are allowed to issue SSL certificates for a domain. Stops outsiders from getting fake certificates for your bank.</dd>
+<dt>CERT-In</dt><dd>India's official cybersecurity emergency response team. The place you report security holes to.</dd>
+<dt>DICGC</dt><dd>Deposit Insurance and Credit Guarantee Corporation. Insures your bank deposit up to <strong>Rs. 5\,lakh</tt> if a bank fails.</dd>
+<dt>DMARC</dt><dd>A rule that tells email providers what to do if an email claims to be from a bank but isn't really. With <tt>p=reject</tt>, fake emails are blocked outright. 40\% of <tt>.bank.in</tt> banks don't have this.</dd>
+<dt>DNS</dt><dd>The internet's phone book &mdash; turns names like <tt>sbi.bank.in</tt> into computer addresses.</dd>
+<dt>DNSSEC</dt><dd>A cryptographic signature for DNS records, proving the phone book entry hasn't been tampered with. 80\% of cooperative banks lack it.</dd>
+<dt>DSC (Digital Signature Certificate)</dt><dd>A government-issued digital ID used to sign documents legally. The registry had endpoints to start DSC sessions &mdash; another sensitive function left exposed.</dd>
+<dt>fTLD Registry</dt><dd>The organization that runs the global <tt>.bank</tt> domain, which enforces the strongest bank-security rules in the world. The benchmark <tt>.bank.in</tt> falls short of.</dd>
+<dt>HSTS</dt><dd>Forces browsers to always use a secure (HTTPS) connection. Stops attackers from downgrading you to an insecure one. 47\% of <tt>.bank.in</tt> sites lack it.</dd>
+<dt>IDRBT</dt><dd>Institute for Development and Research in Banking Technology. An RBI-owned body that runs the <tt>.bank.in</tt> registry.</dd>
+<dt>IFSC</dt><dd>Indian Financial System Code. An 11-character code that identifies a bank branch (used for transfers like NEFT/RTGS). A way to check a bank is real.</dd>
+<dt>OSINT</dt><dd>Open-Source Intelligence. Gathering information from publicly available sources &mdash; no hacking required.</dd>
+<dt>Orphan account</dt><dd>A user account with Super Admin powers but not attached to any real organization. 1,072 of these were found, all with top-level access.</dd>
+<dt>Phishing</dt><dd>Tricking someone into entering their password or OTP on a fake website that looks real. The main threat this leak would have enabled.</dd>
+<dt>Public tender / RFP</dt><dd>An open, competitive process for hiring a vendor. IDRBT skipped this entirely when building the registry portal.</dd>
+<dt>Super Admin</dt><dd>The highest level of access in the portal &mdash; can do anything, including changing any bank's domain settings. Left exposed for IKCON staff.</dd>
+<dt>TLS / SSL certificate</dt><dd>The padlock in your browser's address bar. Proves a website is encrypted and (with EV/OV types) verified. Many <tt>.bank.in</tt> sites use the free, identity-free kind.</dd>
+</dl>
+
+</section>
+
+<section id="about">
+<h2>About the Author</h2>
+<h2>CashlessConsumer</h2>
+<p><strong>CashlessConsumer</tt> is a consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society [1]. It is not a legal entity and collects no personal data or analytics [2]. Srikanth L, a contributor to the collective, authored this report.</p>
+<p>xtbf{Prior investigations and published work:</tt></p>
+<li>xtbf{KillerLoanApps</tt> (2020--2024) &mdash; Analysis of predatory digital lending apps operating across India, tracking how unregulated platforms harvested user data, evaded Play Store oversight, and operated through shell company networks [3][4][5]. Presented at Hasgeek [6]. Engaged with Ministry of Home Affairs' @CyberDost initiative on combating the issue.</li>
+</ul>
+<ul>
+<li>xtbf{BFIL Consent Scam / Citizens' Report</tt> (2021--2022) &mdash; Investigated Bharat Financial Inclusion Limited's (IndusInd Bank subsidiary) disbursal of 84,000 loans without customer consent, attributed to a 'technical glitch' [7]. The report was cited by Internet Freedom Foundation [8] and led to the <strong>DigitalLending WatchTower</tt> initiative tracking the digital lending space from a consumer protection perspective [9].</li>
+</ul>
+<ul>
+<li>xtbf{IDRBT .bank.in Security Investigation</tt> (2026) &mdash; Discovery of 33+ unauthenticated API endpoints on the IDRBT Domain Registration Portal exposing bcrypt password hashes for 5,576 bank employees, documented in this report. The daily security audit feed [10] and live uptime monitor [11] are published as open data.</li>
+</ul>
+<ul>
+<li>xtbf{Fintech Governance RTI Program</tt> (2018--ongoing) &mdash; Systematic RTI-based investigations filed with the RBI, NPCI, SEBI, and other financial regulators to track enforcement actions, payment system operator compliance, and consumer protection mechanisms [12].</li>
+</ul>
+<ul>
+<li>xtbf{Certificate Transparency Monitoring</tt> (ongoing) &mdash; Tracking SSL certificate issuance for Indian banking and government domains to identify phishing infrastructure and mis-issued certificates.</li>
+</ul>
+<h3>References</h3>
+<li>[1] CashlessConsumer about page: <a href="https://www.cashlessconsumer.in/about/</tt></li>
+<li>[2] CashlessConsumer disclaimers: <a href="https://www.cashlessconsumer.in/about/disclaimers/</tt></li>
+<li>[3] KillerLoanApps investigation: <a href="https://www.cashlessconsumer.in/post/killerloanapps</tt></li>
+<li>[4] Fake lending apps database (Medium): <a href="https://medium.com/cashlessconsumer/fake-digital-lending-apps-database-b5de323f6d1b</tt></li>
+<li>[5] KillerLoanApps at Hasgeek: <a href="https://hasgeek.com/cashlessconsumer/killerloanapps-detecting-fake-fintech-apps</tt></li>
+<li>[6] @CyberDost engagement on predatory lending — see CashlessConsumer's referenced work with Ministry of Home Affairs' cyber awareness initiative.</li>
+<li>[7] BFIL Consent Scam — Citizens' Report (March 2022): <a href="https://www.cashlessconsumer.in/uploads/BFILConsentScamReport.pdf</tt></li>
+<li>[8] Internet Freedom Foundation explainer on BFIL consent scam: <a href="https://internetfreedom.in/bfil-consent-scam</tt></li>
+<li>[9] DigitalLending WatchTower at Hasgeek: <a href="https://hasgeek.com/cashlessconsumer/digital-lending-watchtower</tt></li>
+<li>[10] bank-in-domains daily audit (GitHub): <a href="https://github.com/CCAgentOrg/bank-in-domains</tt></li>
+<li>[11] Banking domain uptime monitor: <a href="https://uptime.cashlessconsumer.in</tt></li>
+<li>[12] RTI filings list: <a href="https://www.cashlessconsumer.in/post/rtilist</tt></li>
+</ul>
+<p>\noindent\textit{Report by Srikanth L, CashlessConsumer. June 2026.</tt></p>
+
+</section>
+
+</main>
+
+<footer>
+<p><strong>From Trust Mandate to Security Debacle</strong> &mdash; A Security Investigation by CashlessConsumer</p>
+<p>All non-sensitive data published as open data. No PII included.</p>
+<p><a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation">Source Code</a> &middot;
+<a href="https://zo.pub/cashlessconsumer/idrbt-bankin-security">Evidence Archive</a> &middot;
+<a href="report.pdf">Download PDF</a> &middot;
+<a href="https://uptime.cashlessconsumer.in">Uptime Monitor</a> &middot;
+<a href="https://github.com/CCAgentOrg/bank-in-domains">bank-in-domains</a></p>
+</footer>
+
+</body>
+</html>
