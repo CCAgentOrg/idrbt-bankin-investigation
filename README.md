@@ -9,14 +9,13 @@ A responsible disclosure investigation into the IDRBT Domain Registration Portal
 
 ## Key Findings
 
-1. **33+ Unauthenticated API Endpoints** — User database (5,576 records with bcrypt hashes), invoices (₹4.56 crore), system config all exposed without auth
+1. **33+ Unauthenticated API Endpoints** — User database (5,576 records with bcrypt hashes), system config all exposed without auth
 2. **5,576 User Records Exposed** — Full PII, bcrypt password hashes, OTP hashes, device fingerprints
-3. **1,465 Billing Records** — ₹4.56 crore in domain registration invoices exposed
-4. **Phantom Test Domains** — Test domains (VKTEST, IDTMAY, etc.) live on NIXI alongside real banks
-5. **No DMARC Enforcement** — 40% of .bank.in domains have zero email spoofing protection
-6. **Data Residency Violations** — Cooperative banks hosted on foreign servers (US, Singapore, Lithuania)
-7. **Non-Bank Entities** — Housing finance companies and phantom organizations with Super Admin access
-8. **No Public Tender** — IKCON Technologies appointed without visible procurement process
+3. **Phantom Test Domains** — Test domains (VKTEST, IDTMAY, etc.) live on NIXI alongside real banks
+4. **No DMARC Enforcement** — 40% of .bank.in domains have zero email spoofing protection
+5. **Data Residency Violations** — Cooperative banks hosted on foreign servers (US, Singapore, Lithuania)
+6. **Non-Bank Entities** — Housing finance companies and phantom organizations with Super Admin access
+7. **No Public Tender** — IKCON Technologies appointed without visible procurement process
 
 ## Timeline
 
@@ -27,7 +26,6 @@ A responsible disclosure investigation into the IDRBT Domain Registration Portal
 | 2026-05 | IDRBT portal launched |
 | 2026-06-08 05:07 | Discovery of unauthenticated user database endpoint |
 | 2026-06-08 05:30 | Initial report filed with CERT-In |
-| 2026-06-08 06:30 | Invoice/billing endpoints discovered (₹4.56 crore) |
 | 2026-06-08 07:30 | Extended enumeration: orphan users, phantom domains, DSC proxy |
 | 2026-06-08 | CERT-In acknowledges, requests PoC |
 | 2026-06-26 | CERT-In confirms vulnerability has been fixed |
@@ -38,9 +36,7 @@ All non-sensitive datasets published at:
 https://zo.pub/cashlessconsumer/idrbt-open-data
 
 - `domains.txt` — All 1,497 registered .bank.in domains
-- `billing.csv` — 1,465 anonymized billing records (₹4.56 crore)
 - `certificate-transparency.csv` — 6,543 CT log entries
-- `stats.json` — Aggregate statistics
 
 ## POC Video  
 https://zo.pub/cashlessconsumer/idrbt-poc-video
