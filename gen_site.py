@@ -54,6 +54,18 @@ TR_EN = {
     "about_ref": "Prior work: KillerLoanApps · BFIL Consent Scam · Fintech Governance RTI Program",
     "about_links": "cashlessconsumer.in · Newsletter · GitHub",
     "footer": "Published under responsible disclosure principles. © June 2026. Report by Srikanth L, CashlessConsumer.",
+
+    # New Security Claims section
+    "h2_claims": "Security Claims vs Reality",
+    "claims_intro": "IDRBT's published <a href=\"https://registrar.idrbt.ac.in/assets/files/privacy%20policy.pdf\">Privacy &amp; Security Policy</a> makes specific claims about security auditing, authentication, and data protection for the Domain Registration Portal. Our investigation found every one of these claims to be false.",
+    "claims_caption": "Left: What IDRBT's Security Policy claimed. Right: What our investigation found.",
+    "h3_claim1": "❌ Claim #1: \"Audited for vulnerabilities before launch — all addressed\"",
+    "claims_text1": "The Security Policy claims: <em>\"The website was audited for known application-level vulnerabilities before the launch, and all the known vulnerability was addressed.\"</em> Our investigation found <strong>33+ unauthenticated API endpoints</strong> that exposed the entire user database, billing records, system configuration, and DSC proxy — a comprehensive failure that no competent security audit could have missed. The portal also had <strong>no vulnerability disclosure program (security.txt)</strong>, making it impossible for researchers to report issues through official channels.",
+    "h3_claim2": "❌ Claim #2: \"Content is authenticated\"",
+    "claims_text2": "The policy states: <em>\"Content is authenticated and is provided for general information.\"</em> Accessing every discovered endpoint required <strong>zero authentication</strong> — no login, no API key, no session cookie, no token. Anyone with <tt>curl</tt> could download the entire user database. The only thing protecting India's banking domain registry was security through obscurity.",
+    "h3_claim3": "❌ Claim #3: \"Procedural safeguards that comply with applicable laws\"",
+    "claims_text3": "The policy pledges: <em>\"We protect your personal information by maintaining physical, electronic, and procedural safeguards that comply with applicable laws.\"</em> Exposing bcrypt password hashes, phone numbers, and device fingerprints of 5,576 bank employees without authentication violates every principle of data protection under the Digital Personal Data Protection Act, 2023, and RBI's own cybersecurity framework (RBI/2023-24/90).",
+    "claims_callout": "<strong>Bottom line:</strong> IDRBT's published security policy is a work of fiction. It claims the site was audited for vulnerabilities but 33+ endpoints were wide open. It claims content is authenticated but no endpoint required a login. It claims procedural safeguards but the portal violated India's data protection law and RBI's own cyber framework.",
 }
 
 # Hindi
@@ -141,7 +153,17 @@ ALL_LANGS = {
   "about_text": "A consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society. This investigation follows a consistent methodology: public records, OSINT, RTI, and responsible disclosure — no hacking, no stolen data, no adversarial techniques.",
   "about_ref": "Prior work: KillerLoanApps · BFIL Consent Scam · Fintech Governance RTI Program",
   "about_links": "cashlessconsumer.in · Newsletter · GitHub",
-  "footer": "Published under responsible disclosure principles. © June 2026. Report by Srikanth L, CashlessConsumer."
+  "footer": "Published under responsible disclosure principles. © June 2026. Report by Srikanth L, CashlessConsumer.",
+  "h2_claims": "Security Claims vs Reality",
+  "claims_intro": "IDRBT's published <a href=\"https://registrar.idrbt.ac.in/assets/files/privacy%20policy.pdf\">Privacy &amp; Security Policy</a> makes specific claims about security auditing, authentication, and data protection for the Domain Registration Portal. Our investigation found every one of these claims to be false.",
+  "claims_caption": "Left: What IDRBT's Security Policy claimed. Right: What our investigation found.",
+  "h3_claim1": "❌ Claim #1: \"Audited for vulnerabilities before launch — all addressed\"",
+  "claims_text1": "The Security Policy claims: <em>\"The website was audited for known application-level vulnerabilities before the launch, and all the known vulnerability was addressed.\"</em> Our investigation found <strong>33+ unauthenticated API endpoints</strong> that exposed the entire user database, billing records, system configuration, and DSC proxy — a comprehensive failure that no competent security audit could have missed. The portal also had <strong>no vulnerability disclosure program (security.txt)</strong>, making it impossible for researchers to report issues through official channels.",
+  "h3_claim2": "❌ Claim #2: \"Content is authenticated\"",
+  "claims_text2": "The policy states: <em>\"Content is authenticated and is provided for general information.\"</em> Accessing every discovered endpoint required <strong>zero authentication</strong> — no login, no API key, no session cookie, no token. Anyone with <tt>curl</tt> could download the entire user database. The only thing protecting India's banking domain registry was security through obscurity.",
+  "h3_claim3": "❌ Claim #3: \"Procedural safeguards that comply with applicable laws\"",
+  "claims_text3": "The policy pledges: <em>\"We protect your personal information by maintaining physical, electronic, and procedural safeguards that comply with applicable laws.\"</em> Exposing bcrypt password hashes, phone numbers, and device fingerprints of 5,576 bank employees without authentication violates every principle of data protection under the Digital Personal Data Protection Act, 2023, and RBI's own cybersecurity framework (RBI/2023-24/90).",
+  "claims_callout": "<strong>Bottom line:</strong> IDRBT's published security policy is a work of fiction. It claims the site was audited for vulnerabilities but 33+ endpoints were wide open. It claims content is authenticated but no endpoint required a login. It claims procedural safeguards but the portal violated India's data protection law and RBI's own cyber framework."
 },
     "hi": {
   "label": "हिन्दी",
@@ -172,7 +194,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "ta": {
   "label": "தமிழ்",
@@ -203,7 +235,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "mr": {
   "label": "मराठी",
@@ -234,7 +276,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "te": {
   "label": "తెలుగు",
@@ -265,7 +317,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "gu": {
   "label": "ગુજરાતી",
@@ -296,7 +358,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "ur": {
   "label": "اردو",
@@ -327,7 +399,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "kn": {
   "label": "ಕನ್ನಡ",
@@ -358,7 +440,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "bn": {
   "label": "বাংলা",
@@ -389,7 +481,17 @@ ALL_LANGS = {
   "scenario1": "…",
   "scenario2": "…",
   "scenario3": "…",
-  "data_footnote": "…"
+  "data_footnote": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 },
     "ml": {
   "label": "മലയാളം",
@@ -420,7 +522,17 @@ ALL_LANGS = {
   "dl_open": "…",
   "footer": "…",
   "byline": "…",
-  "h2_data": "…"
+  "h2_data": "…",
+  "h2_claims": "…",
+  "claims_intro": "…",
+  "claims_caption": "…",
+  "h3_claim1": "…",
+  "claims_text1": "…",
+  "h3_claim2": "…",
+  "claims_text2": "…",
+  "h3_claim3": "…",
+  "claims_text3": "…",
+  "claims_callout": "…"
 }
 }
 
@@ -498,6 +610,10 @@ section p strong{color:#b00}
 .data-table .yes{color:#080}
 .data-table .no{color:#b00}
 
+/* ── Comparison image ── */
+.compare-img{width:100%;max-width:680px;height:auto;border-radius:6px;border:1px solid #e0e0e0;margin:12px 0}
+.compare-caption{font-size:.78rem;color:#888;text-align:center;margin-top:4px;margin-bottom:16px}
+
 /* ── Download / Links ── */
 .dl-strip{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:16px 0}
 .dl-strip a{font-size:.9rem;background:#fff;border:1px solid #ddd;border-radius:5px;padding:10px 18px;color:#333;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
@@ -555,6 +671,25 @@ footer{padding:32px 0;text-align:center;color:#bbb;font-size:.75rem}
 <a href="report.pdf" class="dl-primary" data-i18n="dl_report">📄 Download Full Report (PDF)</a>
 <a href="open-data/" data-i18n="dl_open">📦 Exposed Data &amp; Datasets</a>
 </div>
+
+<!-- Security Claims vs Reality -->
+<section>
+<h2 data-i18n="h2_claims">Security Claims vs Reality</h2>
+<p data-i18n="claims_intro">IDRBT's published <a href=\"https://registrar.idrbt.ac.in/assets/files/privacy%20policy.pdf\">Privacy &amp; Security Policy</a> makes specific claims about security auditing, authentication, and data protection for the Domain Registration Portal. Our investigation found every one of these claims to be false.</p>
+<img src=\"idrbt-lied-comparison.jpg\" alt=\"IDRBT security policy claims vs reality comparison\" class=\"compare-img\" data-i18n=\"claims_img\" />
+<div class=\"compare-caption\" data-i18n=\"claims_caption\">Left: What IDRBT's Security Policy claimed. Right: What our investigation found.</div>
+
+<h3 data-i18n=\"h3_claim1\" style=\"font-size:.9rem;margin:20px 0 6px;color:#b00;font-weight:600\">❌ Claim #1: \"Audited for vulnerabilities before launch — all addressed\"</h3>
+<p data-i18n=\"claims_text1\">The Security Policy claims: <em>\"The website was audited for known application-level vulnerabilities before the launch, and all the known vulnerability was addressed.\"</em> Our investigation found <strong>33+ unauthenticated API endpoints</strong> that exposed the entire user database, billing records, system configuration, and DSC proxy — a comprehensive failure that no competent security audit could have missed. The portal also had <strong>no vulnerability disclosure program (security.txt)</strong>, making it impossible for researchers to report issues through official channels.</p>
+
+<h3 data-i18n=\"h3_claim2\" style=\"font-size:.9rem;margin:20px 0 6px;color:#b00;font-weight:600\">❌ Claim #2: \"Content is authenticated\"</h3>
+<p data-i18n=\"claims_text2\">The policy states: <em>\"Content is authenticated and is provided for general information.\"</em> Accessing every discovered endpoint required <strong>zero authentication</strong> — no login, no API key, no session cookie, no token. Anyone with <tt>curl</tt> could download the entire user database. The only thing protecting India's banking domain registry was security through obscurity.</p>
+
+<h3 data-i18n=\"h3_claim3\" style=\"font-size:.9rem;margin:20px 0 6px;color:#b00;font-weight:600\">❌ Claim #3: \"Procedural safeguards that comply with applicable laws\"</h3>
+<p data-i18n=\"claims_text3\">The policy pledges: <em>\"We protect your personal information by maintaining physical, electronic, and procedural safeguards that comply with applicable laws.\"</em> Exposing bcrypt password hashes, phone numbers, and device fingerprints of 5,576 bank employees without authentication violates every principle of data protection under the Digital Personal Data Protection Act, 2023, and RBI's own cybersecurity framework (RBI/2023-24/90).</p>
+
+<div class=\"callout\" data-i18n=\"claims_callout\"><strong>Bottom line:</strong> IDRBT's published security policy is a work of fiction. It claims the site was audited for vulnerabilities but 33+ endpoints were wide open. It claims content is authenticated but no endpoint required a login. It claims procedural safeguards but the portal violated India's data protection law and RBI's own cyber framework.</div>
+</section>
 
 <!-- Data table -->
 <section>
