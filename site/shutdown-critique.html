@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>.bank.in Shutdown Critique — Internet Control Infrastructure — CashlessConsumer</title>
+<meta name="description" content="The critique that .bank.in is not a security initiative but a whitelist infrastructure enabling surgically precise internet shutdowns. The RBI vs state-governance tension, the digital-authoritarian lens, and what it means for citizens." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fafafa;color:#222;line-height:1.6;font-size:16px}
+a{color:#b00;text-decoration:none}
+a:hover{text-decoration:underline}
+tt,code,pre{font-family:Menlo,Consolas,monospace;font-size:.85em}
+
+.container{max-width:680px;margin:0 auto;padding:0 20px}
+
+.hero{padding:48px 0 24px;text-align:center}
+.hero .tag{display:inline-block;background:#b00;color:#fff;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:16px}
+.hero h1{font-size:1.5rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-.01em}
+.hero .byline{color:#888;font-size:.82rem}
+.hero .back{font-size:.8rem;margin-top:12px;display:block}
+
+section{padding:24px 0}
+section p{color:#444;margin-bottom:16px;font-size:.95rem}
+section p strong{color:#b00}
+section p.insight{font-size:.9rem;color:#555;padding:12px 16px;background:#f4f4f4;border-radius:6px;border-left:3px solid #888}
+
+.callout{background:#fafafa;border-left:3px solid #b00;padding:16px 20px;margin:20px 0;border-radius:0 6px 6px 0;font-size:.92rem;color:#444}
+.callout-grey{border-left-color:#888}
+.callout-amber{background:#fff8e1;border-left-color:#f0c000;color:#6d5200}
+
+h2{font-size:1.15rem;font-weight:700;margin:28px 0 14px;color:#222}
+h3{font-size:.95rem;font-weight:600;margin:20px 0 8px;color:#444}
+
+.data-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:12px 0}
+.data-table th,.data-table td{text-align:left;padding:6px 8px;border-bottom:1px solid #eee}
+.data-table th{color:#888;font-weight:500;font-size:.74rem;text-transform:uppercase;letter-spacing:.03em}
+.data-table td{color:#444}
+
+.links-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding:8px 0 20px;font-size:.85rem}
+.links-row a{color:#666}
+.links-row a:hover{color:#b00;text-decoration:none}
+
+.about-box{background:#fff;border:1px solid #eee;border-radius:6px;padding:20px;margin:20px 0;font-size:.88rem}
+.about-box h3{font-size:.95rem;font-weight:600;margin-bottom:4px;color:#222}
+.about-box p{color:#666;margin-bottom:6px;font-size:.88rem}
+.about-box .ref{color:#999;font-size:.8rem}
+
+footer{padding:32px 0;text-align:center;color:#bbb;font-size:.75rem}
+
+@media(max-width:520px){
+  .hero h1{font-size:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<div class="container hero">
+<div class="tag">Critique &amp; Governance</div>
+<h1>.bank.in: Security Sanctuary or Shutdown Whitelist?</h1>
+<div class="byline"><strong>CashlessConsumer</strong> &nbsp;·&nbsp; <span>July 1, 2026</span></div>
+<a href="/" class="back">← Back to main investigation</a>
+</div>
+
+<div class="container">
+
+<section>
+<p>The Central Banking Awards called .bank.in <em>"a key tool in the battle against cyber crime."</em> But there's a darker reading of this infrastructure — one that has little to do with phishing and everything to do with control.</p>
+
+<p>The critique: <strong>.bank.in is not a security initiative. It's a whitelist infrastructure purpose-built for surgically precise internet shutdowns.</strong></p>
+
+<div class="callout callout-amber"><strong>The uncomfortable question:</strong> What happens when the same namespace that protects citizens from phishing is the same namespace that keeps banking running while the rest of the internet goes dark? Is .bank.in a shield, a choke-point, or both?</div>
+</section>
+
+<!-- Section 1 -->
+<section>
+<h2>1. The Shutdown Mechanics</h2>
+
+<p>India already has the technical capacity to block internet access at multiple levels — submarine cable gateways, ISP-level BGP, DNS filtering, app-layer blocks. The problem for the state has always been granularity: how do you shut down social media <em>without</em> shutting down banking?</p>
+
+<p>.bank.in solves that problem elegantly:</p>
+
+<table class="data-table">
+<tr><th>Approach</th><th>Before .bank.in</th><th>After .bank.in</th></tr>
+<tr>
+  <td><strong>Total shutdown</strong></td>
+  <td>Everything goes dark — ATMs, UPI, NEFT, RTGS, stock markets</td>
+  <td>Rarely used — too economically destructive</td>
+</tr>
+<tr>
+  <td><strong>DNS-level filter</strong></td>
+  <td>ISPs maintain ad-hoc whitelists that leak or break</td>
+  <td>One rule: <tt>allow *.bank.in, block *</tt></td>
+</tr>
+<tr>
+  <td><strong>DPI-based block</strong></td>
+  <td>Expensive, error-prone, can be bypassed with VPNs</td>
+  <td>Rarely needed — the namespace is self-enforcing</td>
+</tr>
+<tr>
+  <td><strong>Selective social media block</strong></td>
+  <td>Targeted orders to ISPs, often leaky</td>
+  <td>.bank.in unaffected — banking stays online by default</td>
+</tr>
+</table>
+
+<p class="insight"><strong>Key insight:</strong> .bank.in shifts the compliance burden from every ISP individually to a single, centrally controllable namespace. Any government that controls the .in zone (NIXI) or the .bank.in zone (IDRBT/RBI) can define what "banking" means at the DNS level, and ISPs can implement it with a trivial firewall rule.</p>
+</section>
+
+<!-- Section 2 -->
+<section>
+<h2>2. India's Shutdown Track Record</h2>
+
+<p>India's internet shutdown record gives this critique its weight:</p>
+
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><strong>World leader in shutdowns</strong> — India accounts for roughly 60% of all government-ordered internet shutdowns globally (Access Now, various years)</li>
+<li><strong>Common triggers</strong> — Farmer protests (2020-21), Jammu & Kashmir (2019, 533 days), CAA/NRC protests (2019), communal violence (2023 Manipur, 2026 Sambhal), exam cheating prevention</li>
+<li><strong>State vs Centre tension</strong> — Most shutdowns are ordered by state governments, not the Centre. The RBI is a central institution. A namespace controlled by RBI can operate independently of state-level shutdowns — <em>if</em> RBI chooses to keep it open.</li>
+<li><strong>The J&K precedent</strong> — When India revoked Article 370 in August 2019, Jammu & Kashmir had a 533-day internet shutdown. Banking services were among the most affected, with no mechanism to keep essential financial services online while blocking everything else.</li>
+</ul>
+
+<p>The question is not whether .bank.in <em>could be</em> used as whitelist infrastructure. The question is whether it already is, by design.</p>
+</section>
+
+<!-- Section 3 -->
+<section>
+<h2>3. The Design Pattern: RBI as Gatekeeper</h2>
+
+<p>Look at the architecture again through the shutdown lens:</p>
+
+<ol style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><strong>All banking domains end in .bank.in</strong> — mandatory, not optional. There is no legitimate non-.bank.in banking website after the migration deadline.</li>
+<li><strong>Registration is centralised</strong> — IDRBT (wholly owned by RBI) is the sole registrar. No bank can join the namespace without RBI's approval.</li>
+<li><strong>The zone is monitored daily</strong> — Our own daily audit feed at <a href="https://github.com/CCAgentOrg/bank-in-domains">bank-in-domains</a> publishes DNS and HTTPS status for every registered domain. If RBI runs a similar audit, it knows exactly which domains are live.</li>
+<li><strong>Delegation can be revoked</strong> — Individual banks have their own NS zones, but the parent zone (bank.in) controls the delegation. IDRBT can remove a bank's delegation at any time by removing its NS records from the parent zone.</li>
+<li><strong>One rule, one block</strong> — Firewall at NIXI gateway, ISP level, or DoT SDN controller: allow .bank.in, deny *. That's it. A single submarine cable-level ACL.</li>
+</ol>
+
+<div class="callout"><strong>Bottom line:</strong> The infrastructure for a "banking stays on while the rest goes dark" shutdown model already exists. The registry knows every domain. The registrar is a single institution. The namespace rules are mandatory. The only missing ingredient is a government order.</div>
+</section>
+
+<!-- Section 4 -->
+<section>
+<h2>4. The Award Controversy</h2>
+
+<p>Central Banking gave RBI its "Initiative of the Year" award in March 2026, specifically citing .bank.in as a tool against cyber crime. The citation reads:</p>
+
+<p style="font-style:italic;color:#555;font-size:.9rem;margin:12px 24px">"By introducing a mandatory domain name for all regulated banks, the Reserve Bank of India has given lenders a key tool in the battle against cyber crime."</p>
+
+<p>There is no mention of the shutdown risk in the award citation. Not a word. This is either:</p>
+
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><strong>Naive</strong> — London-based award committee unaware of India's internet shutdown record and the dual-use nature of restricted namespaces, or</li>
+<li><strong>Deliberately narrow</strong> — The award is framed as a cybersecurity initiative because that's the only defensible framing. The shutdown use case is not just unspoken — it's the kind of feature you would never put in a press release, not even the award entry.</li>
+</ul>
+
+<div class="callout callout-grey">The award is not wrong — .bank.in <em>does</em> help fight phishing. The problem is that fighting phishing is the <em>best-case</em> use. The worst-case use — enabling state control over internet access to financial services — is equally well-served by the same architecture.</div>
+</section>
+
+<!-- Section 5 -->
+<section>
+<h2>5. The Tension: RBI as Shield vs State as Sword</h2>
+
+<p>The most important nuance in this critique is the level of government at play:</p>
+
+<table class="data-table">
+<tr><th>Scenario</th><th>Who Orders</th><th>RBI Position</th><th>Outcome</th></tr>
+<tr>
+  <td><strong>Jammu & Kashmir-style shutdown</strong></td>
+  <td>State/Centre</td>
+  <td>RBI may resist state-level shutdown, keeping bank.in live</td>
+  <td>Banking works even if state blocks everything else</td>
+</tr>
+<tr>
+  <td><strong>Centre orders RBI to cooperate</strong></td>
+  <td>Centre (through Financial Stability Board or similar)</td>
+  <td>RBI as a statutory body cannot refuse a government directive</td>
+  <td>.bank.in is whitelisted, everything else is blocked</td>
+</tr>
+<tr>
+  <td><strong>State blocks bank.in DNS</strong></td>
+  <td>State govt</td>
+  <td>RBI's zone sits above the state — state ISPs can still block</td>
+  <td>Depends on whether ISPs comply with state or RBI</td>
+</tr>
+<tr>
+  <td><strong>Emergency financial freeze</strong></td>
+  <td>RBI itself</td>
+  <td>RBI could de-register individual bank domains</td>
+  <td>A bank removed from bank.in is effectively invisible online</td>
+</tr>
+</table>
+
+<p>The RBI is <em>not</em> the same as "the government" — it is a statutory body with a degree of independence. But that independence is limited, and it can be overridden. The architecture of .bank.in does not distinguish between RBI using it for security and the state using it for control.</p>
+</section>
+
+<!-- Section 6 -->
+<section>
+<h2>6. What This Means for Citizens</h2>
+
+<p>Regardless of RBI's intent, the existence of .bank.in creates new risks:</p>
+
+<table class="data-table">
+<tr><th>Risk</th><th>Scenario</th></tr>
+<tr>
+  <td><strong>State-level internet shutdowns become cheaper</strong></td>
+  <td>Instead of ordering a total block or managing leaky DNS filters, a state government simply asks ISPs to "block all but bank.in." Compliance is trivially enforceable and auditable.</td>
+</tr>
+<tr>
+  <td><strong>Financial exclusion becomes a weapon</strong></td>
+  <td>If a government wants to pressure a community or region, it can selectively block financial services. During the 2023 Manipur violence, financial services were disrupted for weeks. .bank.in could make exclusion more surgical.</td>
+</tr>
+<tr>
+  <td><strong>Bank-specific censorship</strong></td>
+  <td>A bank that falls out of political favour could have its .bank.in delegation revoked by IDRBT — effectively making it invisible online. This is a de facto kill switch that doesn't exist for non-.bank.in businesses.</td>
+</tr>
+<tr>
+  <td><strong>Surveillance choke-point</strong></td>
+  <td>All .bank.in DNS queries flow through resolvers that know exactly which bank you're visiting. If RBI or the government mandates logging at NIXI level, they get a complete picture of who is banking where and when.</td>
+</tr>
+</table>
+
+<div class="callout callout-amber"><strong>This is not hypothetical.</strong> The infrastructure described here <em>already exists</em>. The .bank.in zone is live. The registry is complete. The enforcement mechanism — exclusion from the namespace — is codified. What we don't know is whether this use was intended, whether RBI has internal safeguards against it, or whether those safeguards would survive a real crisis.</div>
+</section>
+
+<!-- Links -->
+<div class="links-row">
+<a href="/">🔐 Main Investigation</a>
+<a href="/cookie-tracking.html">🍪 Cookie Tracking Analysis</a>
+<a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation">💻 Source Code</a>
+<a href="https://github.com/CCAgentOrg/bank-in-domains">🔍 Daily Audit Feed</a>
+</div>
+
+<!-- About -->
+<div class="about-box">
+<h3>CashlessConsumer</h3>
+<p>A consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society.</p>
+<div class="ref">
+<a href="https://cashlessconsumer.in">cashlessconsumer.in · GitHub</a>
+</div>
+</div>
+
+</div>
+
+<footer class="container">
+<p>© July 2026. CashlessConsumer. <a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation">Source on GitHub</a>.</p>
+</footer>
+
+</body>
+</html>
