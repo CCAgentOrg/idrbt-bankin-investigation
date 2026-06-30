@@ -756,6 +756,7 @@ footer{padding:32px 0;text-align:center;color:#bbb;font-size:.75rem}
 <a href="https://github.com/CCAgentOrg/bank-in-domains" data-i18n="ln_audit">🔍 Daily Audit Feed</a>
 <a href="https://zo.pub/cashlessconsumer/idrbt-bankin-security" data-i18n="ln_archive">📋 Evidence</a>
 <a href="/llms.txt" data-i18n="ln_llms">🤖 LLMs.txt</a>
+<a href="/cookie-tracking.html">🍪 Cookie Tracking Analysis</a>
 </div>
 
 <!-- About -->

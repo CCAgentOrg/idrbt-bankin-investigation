@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>.bank.in Cookie Tracking — Cross-Bank Privacy Vector — CashlessConsumer</title>
+<meta name="description" content="How .bank.in — India's exclusive banking domain — becomes a cross-bank tracking surface. Kingsly's discovery, Public Suffix List gaps, and the expedition to find real-world privacy abuses." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍪</text></svg>" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fafafa;color:#222;line-height:1.6;font-size:16px}
+a{color:#b00;text-decoration:none}
+a:hover{text-decoration:underline}
+tt,code,pre{font-family:Menlo,Consolas,monospace;font-size:.85em}
+
+.container{max-width:680px;margin:0 auto;padding:0 20px}
+
+.hero{padding:48px 0 24px;text-align:center}
+.hero .tag{display:inline-block;background:#b00;color:#fff;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:16px}
+.hero h1{font-size:1.5rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-.01em}
+.hero .byline{color:#888;font-size:.82rem}
+.hero .back{font-size:.8rem;margin-top:12px;display:block}
+
+section{padding:24px 0}
+section p{color:#444;margin-bottom:16px;font-size:.95rem}
+section p strong{color:#b00}
+
+.callout{background:#fafafa;border-left:3px solid #b00;padding:16px 20px;margin:20px 0;border-radius:0 6px 6px 0;font-size:.92rem;color:#444}
+.callout-green{border-left-color:#080}
+
+.kingsly-block{background:#fff;border:1px solid #eee;border-radius:8px;padding:20px;margin:20px 0;font-size:.9rem}
+.kingsly-block .tweet{color:#333;font-size:.95rem;margin-bottom:8px}
+.kingsly-block .attribution{color:#888;font-size:.8rem}
+.kingsly-block .cookies{margin:10px 0;padding:10px 14px;background:#f5f5f5;border-radius:4px;font-family:Menlo,Consolas,monospace;font-size:.82rem;color:#555}
+
+h2{font-size:1.15rem;font-weight:700;margin:28px 0 14px;color:#222}
+h3{font-size:.95rem;font-weight:600;margin:20px 0 8px;color:#444}
+
+.diagram-box{background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:20px;margin:16px 0;text-align:center;font-size:.85rem}
+.diagram{font-family:Menlo,Consolas,monospace;font-size:.8rem;line-height:1.7;color:#555;text-align:left;display:inline-block}
+
+.data-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:12px 0}
+.data-table th,.data-table td{text-align:left;padding:6px 8px;border-bottom:1px solid #eee}
+.data-table th{color:#888;font-weight:500;font-size:.74rem;text-transform:uppercase;letter-spacing:.03em}
+.data-table td{color:#444}
+
+.links-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding:8px 0 20px;font-size:.85rem}
+.links-row a{color:#666}
+.links-row a:hover{color:#b00;text-decoration:none}
+
+.about-box{background:#fff;border:1px solid #eee;border-radius:6px;padding:20px;margin:20px 0;font-size:.88rem}
+.about-box h3{font-size:.95rem;font-weight:600;margin-bottom:4px;color:#222}
+.about-box p{color:#666;margin-bottom:6px;font-size:.88rem}
+.about-box .ref{color:#999;font-size:.8rem}
+
+footer{padding:32px 0;text-align:center;color:#bbb;font-size:.75rem}
+
+@media(max-width:520px){
+  .hero h1{font-size:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="container hero">
+<div class="tag">Privacy &amp; Tracking</div>
+<h1>.bank.in Supercookies: How India's Banking Domain Becomes a Cross-Bank Tracking Vector</h1>
+<div class="byline"><strong>CashlessConsumer</strong> &nbsp;·&nbsp; <span>June 30, 2026</span></div>
+<a href="/" class="back">← Back to main investigation</a>
+</div>
+
+<div class="container">
+
+<section>
+<p>A domain suffix designed to be a trust anchor — telling citizens "this website is genuinely your bank" — can accidentally become a <strong>cross-bank tracking surface</strong> when the <em>browser</em> doesn't know that <code>sbi.bank.in</code> and <code>hdfc.bank.in</code> should be treated as separate sites.</p>
+
+<p>This page documents the browser cookie mechanics, the Public Suffix List fix that already exists, the gap that remains in practice, what Kingsly J discovered in Feb 2026, and an expedition plan to find real-world abuses.</p>
+
+<div class="callout"><strong>Status:</strong> <tt>.bank.in</tt> was added to the Public Suffix List in Nov 2025 (PR #2603 by NIC.IN). But this doesn't eliminate the risk — PSL updates propagate slowly to browsers, WebViews, and embedded browsers. Kingsly found cookies crossing bank boundaries as late as Feb 2026, 3+ months after the PSL entry.</div>
+</section>
+
+<!-- Section 1: How the PSL works -->
+<section>
+<h2>1. The Public Suffix List &amp; Cookie Isolation</h2>
+
+<p>The <a href="https://publicsuffix.org">Public Suffix List</a> (PSL) is a machine-readable catalogue that tells browsers which domain suffixes belong to a registry — so <code>cookie.example.co.uk</code> and <code>other.example.co.uk</code> can't read each other's cookies.</p>
+
+<p>Without a PSL entry for <code>bank.in</code>, the browser treats it as a "private domain":</p>
+
+<div class="diagram-box">
+<div class="diagram">
+<img src='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200"><text x="20" y="30" font-family="monospace" font-size="14" fill="#b00">❌ WITHOUT PSL entry for .bank.in:</text><text x="20" y="55" font-family="monospace" font-size="13" fill="#444">  Browser treats .bank.in as a single "site"</text><text x="20" y="78" font-family="monospace" font-size="13" fill="#444">  sbi.bank.in  ──→  Cookie: session=abc  ──→  sent to hdfc.bank.in too!</text><text x="20" y="105" font-family="monospace" font-size="14" fill="#080">✅ WITH PSL entry for .bank.in:</text><text x="20" y="130" font-family="monospace" font-size="13" fill="#444">  Browser knows .bank.in is a registry suffix</text><text x="20" y="153" font-family="monospace" font-size="13" fill="#444">  sbi.bank.in ──→ Cookie session=abc stays at sbi only</text></svg>' alt="PSL diagram: before and after" style="width:100%;max-width:600px;height:auto;border-radius:4px" />
+</div>
+</div>
+
+<p>The mechanic is simple: any cookie set with <tt>Domain=.bank.in</tt> by one bank will be sent to <em>every</em> <tt>*.bank.in</tt> domain the user visits. This means:</p>
+
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li>A <strong>session cookie</strong> set by SBI's site can be read by HDFC's site</li>
+<li>A <strong>tracking cookie</strong> (ad ID, analytics fingerprint) follows the user across every bank visit</li>
+<li>A <strong>malicious bank</strong> (or a compromised third-party script on any bank's page) can set cookies readable by all other banks</li>
+</ul>
+</section>
+
+<!-- Section 2: PSL Status -->
+<section>
+<h2>2. .bank.in on the PSL — Already Fixed at the Registry Level</h2>
+
+<p>During our research for this page, we discovered that <code>bank.in</code> <strong>is already on the Public Suffix List</strong>.</p>
+
+<p>It was added via <a href="https://github.com/publicsuffix/list/pull/2603">PR #2603</a> — "add bank.in and fin.in to the public suffix list" — submitted by <strong>Gaurav Kansal (NIC.IN)</strong>, the <code>.in</code> registry operator, on <strong>2025-11-06</strong> and merged the same day by PSL maintainer Simon Friedberger.</p>
+
+<p>This was part of the broader update by NIXI/NIC.IN to bring all official <code>.in</code> second-level domains onto the PSL — covering <code>bank.in</code>, <code>fin.in</code>, <code>ac.in</code>, <code>gov.in</code>, <code>edu.in</code>, and others added in the same batch (PR #1588, then PR #2603).</p>
+
+<div class="callout callout-green"><strong>Answer to who can submit:</strong> NIC.IN, as the <code>.in</code> registry operator, already handled this. RBI/IDRBT are not the right party — the PSL submission is the <em>registry's</em> responsibility. The PSL submission was done by NIC.IN (the registry for .in), not RBI. So <strong>no PR is needed from us</strong> — it's done.</div>
+</section>
+
+<!-- Section 3: The gap that remains -->
+<section>
+<h2>3. The Gap That Remains — PSL Updates Are Not Instant</h2>
+
+<p>Adding <code>bank.in</code> to the PSL repository is necessary but not sufficient. Here's why the risk persists:</p>
+
+<h3>3a. Browser Release Cycles</h3>
+<p>The PSL is shipped with browser releases. Chromium fetches updates every ~4-6 weeks for Chrome; Firefox ships with each release (~4 weeks). Safari and mobile WebViews update on their own cadence. <strong>A user running a 3-month-old browser in Feb 2026 would not have the Nov 2025 PSL update.</strong></p>
+
+<h3>3b. Embedded Browsers &amp; WebViews</h3>
+<p>Many Indian apps — banking apps, UPI apps, fintech — use <strong>embedded WebViews</strong> to render bank pages. These WebViews often use a bundled Chromium WebView that may not receive PSL updates for months or years. An SBI YONO app WebView from early 2025 would <em>never</em> know about <code>bank.in</code> on the PSL.</p>
+
+<h3>3c. Third-Party Tracking Scripts</h3>
+<p>The most dangerous vector: if <strong>any</strong> .bank.in site loads a third-party script (analytics, ad network, fraud detection, support widget), that script can set <tt>Domain=.bank.in</tt> cookies. Since browsers without the PSL update see <code>bank.in</code> as a single "site," the third-party can correlate user behaviour across SBI, HDFC, ICICI, and all other banks.</p>
+
+</section>
+
+<!-- Section 4: Kingsly's finding -->
+<section>
+<h2>4. Kingsly's Discovery — Feb 27, 2026</h2>
+
+<div class="kingsly-block">
+<div class="tweet">🧵 While browsing SBI in incognito, noticed cookies scoped to <tt>.bank.in</tt> appearing — specifically <tt>_iidt</tt>, <tt>_vid_t</tt>, and <tt>WZRK_S_...</tt>. The dot-prefix (<tt>.bank.in</tt> not <tt>sbi.bank.in</tt>) means these cookies are shared across ALL <tt>*.bank.in</tt> domains.</div>
+<div class="cookies">Set-Cookie: _iidt=abc123; Domain=.bank.in; Path=/; Max-Age=31536000<br/>Set-Cookie: _vid_t=xyz789; Domain=.bank.in; Path=/; Max-Age=31536000<br/>Set-Cookie: WZRK_S_...=...; Domain=.bank.in; Path=/; Max-Age=31536000</div>
+<div class="attribution">— <a href="https://x.com/kingslyj/status/2027359306820325393">@kingslyj, Feb 27, 2026</a></div>
+</div>
+
+<p>Kingsly's finding is significant because:</p>
+
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><strong>The cookies existed 3+ months after PSL entry</strong> — meaning either the user's browser hadn't picked up the PSL update, or the site was still setting cookies in a way that assumed no PSL protection</li>
+<li><strong>Cookie naming suggests a tracker:</strong> <tt>_iidt</tt> and <tt>_vid_t</tt> follow the pattern of visitor ID / device ID cookies used by ad-tech and analytics platforms</li>
+<li><strong><tt>WZRK_S_...</tt></tt> is particularly suspicious</strong> — this naming convention matches <a href="https://www.wizrocket.com">WizRocket</a> (now part of CleverTap), a customer engagement and analytics platform widely used by Indian fintech companies</li>
+</ul>
+
+<div class="diagram-box">
+<div class="diagram">
+<pre style="font-size:.78rem;line-height:1.6;color:#555;text-align:left">
+USER visits sbi.bank.in
+    │
+    ├─ SBI page loads
+    │   └─ Third-party script (analytics/marketing) sets:
+    │      Set-Cookie: _iidt=abc123; Domain=.bank.in
+    │      Set-Cookie: _vid_t=xyz789; Domain=.bank.in
+    │      Set-Cookie: WZRK_S_...=...; Domain=.bank.in
+    │
+    └─ Cookie stored for .bank.in
+
+USER visits hdfc.bank.in (different bank, same browser)
+    │
+    └─ Browser sends ALL .bank.in cookies:
+       Cookie: _iidt=abc123; _vid_t=xyz789; WZRK_S_...=...
+       │
+       └─ HDFC page can now read these cookies via JS
+          └─ Third-party scripts on HDFC can correlate:
+             "Same visitor who was on sbi.bank.in"
+</pre>
+</div>
+</div>
+</section>
+
+<!-- Section 5: What this enables -->
+<section>
+<h2>5. Theoretical Privacy Harms</h2>
+
+<p>If a tracker successfully sets a <tt>.bank.in</tt>-scoped cookie, the following cross-bank profiling becomes possible:</p>
+
+<table class="data-table">
+<tr><th>Harm</th><th>How It Works</th><th>Severity</th></tr>
+<tr>
+  <td><strong>Cross-bank browsing profile</strong></td>
+  <td>A single visitor ID cookie links all your bank visits — SBI, HDFC, ICICI, Axis — into one profile</td>
+  <td style="color:#b00">High</td>
+</tr>
+<tr>
+  <td><strong>Fintech credit inference</strong></td>
+  <td>Visiting a bank known for personal loans → targeting you with debt products. Visiting multiple banks → tracked as "rate shopping"</td>
+  <td style="color:#b00">High</td>
+</tr>
+<tr>
+  <td><strong>Session hijacking surface</strong></td>
+  <td>If any bank's site has an XSS, the attacker can read cookies set by other banks — because they're all scoped to <tt>.bank.in</tt></td>
+  <td style="color:#b00">Critical</td>
+</tr>
+<tr>
+  <td><strong>Identity stitching</strong></td>
+  <td>Ad-tech platforms can correlate device fingerprints across banking sessions where the user is authenticated, linking demographic data to browsing behaviour</td>
+  <td style="color:#b00">High</td>
+</tr>
+<tr>
+  <td><strong>Competitive intelligence</strong></td>
+  <td>One bank can observe when a user browses a competitor's loan or credit card page — enabling real-time counter-offers in the same session</td>
+  <td style="color:#b00">Medium</td>
+</tr>
+<tr>
+  <td><strong>Fingerprinting amplification</strong></td>
+  <td>Cookies combined with canvas/WebGL fingerprinting from each bank page creates a richer, harder-to-evade cross-site fingerprint</td>
+  <td style="color:#b00">High</td>
+</tr>
+</table>
+
+<div class="callout"><strong>Important:</strong> These are <em>theoretical</em> harms at this stage. The point of the expedition below is to find evidence of actual abuse.</div>
+</section>
+
+<!-- Section 6: Known trackers on .bank.in -->
+<section>
+<h2>6. Known Tracking Infrastructure on .bank.in</h2>
+
+<p>From our daily audit feed, here are third-party domains observed on <code>.bank.in</code> websites that have tracking/analytics capabilities:</p>
+
+<table class="data-table">
+<tr><th>Third-Party Domain</th><th>Known Service</th><th>Cookie Scope Risk</th></tr>
+<tr><td>wizrocket.com</td><td>CleverTap — engagement, push, analytics</td><td>WZRK cookie matches Kingsly's finding</td></tr>
+<tr><td>clevertap.com</td><td>Customer engagement / marketing platform</td><td>Can set visitor-level cookies</td></tr>
+<tr><td>google-analytics.com</td><td>Analytics (GA4)</td><td>Potential <tt>_ga</tt> cookies under observation</td></tr>
+<tr><td>hotjar.com</td><td>Session recording / heatmaps</td><td>Visitor recording cross-bank</td></tr>
+<tr><td>facebook.net</td><td>Meta Pixel</td><td>Ad targeting across banking sessions</td></tr>
+<tr><td>newrelic.com</td><td>APM / real-user monitoring</td><td>Session trace correlation</td></tr>
+</table>
+
+<p>Any third-party script loaded on a <code>.bank.in</code> page <strong>can set <tt>Domain=.bank.in</tt> cookies</strong> via <tt>document.cookie</tt> if the browser doesn't have the updated PSL. This is not just a theoretical risk — it's a browser-level affordance that any tracker can exploit.</p>
+</section>
+
+<!-- Section 7: Expedition plan -->
+<section>
+<h2>7. 🕵️ Expedition: Find Actual Cookie Abuse</h2>
+
+<p>Now we need to go beyond theory. Here's the methodology to find real-world evidence:</p>
+
+<h3>Objective</h3>
+<p>Detect cookies set with <tt>Domain=.bank.in</tt> (or no specific domain restriction) on <code>*.bank.in</code> sites that could enable cross-bank tracking.</p>
+
+<h3>Methodology</h3>
+<ol style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><strong>Visit a set of .bank.in domains</strong> — SBI, HDFC, ICICI, Axis, Kotak — in a browser with developer tools open</li>
+<li><strong>Inspect all cookies</strong> set during page load — especially those with <tt>Domain=.bank.in</tt> or no Domain attribute (which defaults to the host, but scripts can widen)</li>
+<li><strong>Check third-party requests</strong> — look for analytics pixels, tracking scripts, marketing platforms loading on banking pages</li>
+<li><strong>Check if third-party scripts use <tt>document.cookie</tt></strong> to set wide-scope cookies</li>
+<li><strong>Verify cross-bank leakage</strong> — clear bank-specific cookies, visit bank A, note cookies set, visit bank B, check if bank A's cookies appear in bank B's request headers</li>
+</ol>
+
+<h3>Cookie Names to Watch</h3>
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><tt>WZRK_*</tt> — CleverTap/WizRocket (engagement platform, widely used in Indian fintech)</li>
+<li><tt>_iidt</tt> — device/visitor ID</li>
+<li><tt>_vid_t</tt> — visitor ID, timestamp-based</li>
+<li><tt>_ga</tt>, <tt>_gid</tt> — Google Analytics (common on bank websites)</li>
+<li><tt>_fbp</tt> — Facebook Pixel</li>
+<li><tt>ajs_*</tt> — Segment analytics</li>
+<li>Any cookie with <tt>Domain=.bank.in</tt> that is not a session-identifier specific to that one bank</li>
+</ul>
+
+<p><strong>Ready?</strong> This expedition is what we run together next — open the browser, walk through the top banks, and document what we find.</p>
+</section>
+
+<!-- Links -->
+<div class="links-row">
+<a href="/">🔐 Main Investigation</a>
+<a href="https://github.com/publicsuffix/list/pull/2603">📜 PR #2603 — PSL Entry</a>
+<a href="https://x.com/kingslyj/status/2027359306820325393">🐦 Kingsly's Tweet</a>
+<a href="https://github.com/CCAgentOrg/bank-in-domains">🔍 Daily Audit Feed</a>
+</div>
+
+<!-- About -->
+<div class="about-box">
+<h3>CashlessConsumer</h3>
+<p>A consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society.</p>
+<div class="ref">
+<a href="https://cashlessconsumer.in">cashlessconsumer.in · GitHub</a>
+</div>
+</div>
+
+</div>
+
+<footer class="container">
+<p>© June 2026. CashlessConsumer. <a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation">Source on GitHub</a>.</p>
+</footer>
+
+</body>
+</html>
