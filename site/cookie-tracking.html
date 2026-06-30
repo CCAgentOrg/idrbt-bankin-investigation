@@ -221,55 +221,79 @@ USER visits hdfc.bank.in (different bank, same browser)
 <div class="callout"><strong>Important:</strong> These are <em>theoretical</em> harms at this stage. The point of the expedition below is to find evidence of actual abuse.</div>
 </section>
 
-<!-- Section 6: Known trackers on .bank.in -->
+<!-- Section 6: Trackers Observed on .bank.in Sites -->
 <section>
-<h2>6. Known Tracking Infrastructure on .bank.in</h2>
+<h2>6. Trackers Observed on .bank.in Sites</h2>
 
-<p>From our daily audit feed, here are third-party domains observed on <code>.bank.in</code> websites that have tracking/analytics capabilities:</p>
+<p>Live scan of 13 domains revealed the following third-party tracking services actively running on .bank-in websites:</p>
 
 <table class="data-table">
-<tr><th>Third-Party Domain</th><th>Known Service</th><th>Cookie Scope Risk</th></tr>
-<tr><td>wizrocket.com</td><td>CleverTap — engagement, push, analytics</td><td>WZRK cookie matches Kingsly's finding</td></tr>
-<tr><td>clevertap.com</td><td>Customer engagement / marketing platform</td><td>Can set visitor-level cookies</td></tr>
-<tr><td>google-analytics.com</td><td>Analytics (GA4)</td><td>Potential <tt>_ga</tt> cookies under observation</td></tr>
-<tr><td>hotjar.com</td><td>Session recording / heatmaps</td><td>Visitor recording cross-bank</td></tr>
-<tr><td>facebook.net</td><td>Meta Pixel</td><td>Ad targeting across banking sessions</td></tr>
-<tr><td>newrelic.com</td><td>APM / real-user monitoring</td><td>Session trace correlation</td></tr>
+<tr><th>Tracker</th><th>Type</th><th>Banks Using It</th><th>Cookie</th></tr>
+<tr><td>Adobe Analytics / Audience Manager</td><td>Analytics, cross-site audience</td><td>ICICI, Axis, Kotak</td><td>AMCV_*, demdex.net (3rd-party)</td></tr>
+<tr><td>Google Analytics 4</td><td>Analytics</td><td>Most banks</td><td>_ga, _gid</td></tr>
+<tr><td>VWO (Visual Website Optimizer)</td><td>A/B testing, visitor tracking</td><td>ICICI, IDFC First</td><td>_vwo_uuid, _vis_opt_s</td></tr>
+<tr><td>WizRocket / CleverTap</td><td>Customer engagement, push</td><td>Axis</td><td>WZRK_S_*</td></tr>
+<tr><td>Facebook Pixel</td><td>Ad targeting</td><td>Kotak, Federal, IndusInd, Bandhan</td><td>_fbp</td></tr>
+<tr><td>Microsoft Clarity</td><td>Session recording, heatmaps</td><td>Axis</td><td>_clck, _clsk</td></tr>
+<tr><td>LinkedIn Insight Tag</td><td>B2B ad targeting</td><td>Axis</td><td>Third-party pixel</td></tr>
+<tr><td>Akamai Bot Manager</td><td>Bot detection (security)</td><td>ICICI</td><td>_abck, bm_sz</td></tr>
 </table>
 
-<p>Any third-party script loaded on a <code>.bank.in</code> page <strong>can set <tt>Domain=.bank.in</tt> cookies</strong> via <tt>document.cookie</tt> if the browser doesn't have the updated PSL. This is not just a theoretical risk — it's a browser-level affordance that any tracker can exploit.</p>
+<p><strong>Key observation:</strong> Every single cookie from these trackers is scoped to the bank-specific subdomain (e.g. <tt>.axis.bank.in</tt>, <tt>.icici.bank.in</tt>), <em>not</em> the bare <tt>.bank.in</tt>. This confirms the PSL entry is doing its job on modern browsers.</p>
 </section>
 
-<!-- Section 7: Expedition plan -->
+<!-- Section 7: Expedition findings -->
 <section>
-<h2>7. 🕵️ Expedition: Find Actual Cookie Abuse</h2>
+<h2>7. 🕵️ Expedition Findings — Live Scan Results (June 30, 2026)</h2>
 
-<p>Now we need to go beyond theory. Here's the methodology to find real-world evidence:</p>
+<p>We ran a systematic scan across <strong>13 major bank domains</strong> using agent-browser (Chrome-based headless browser):</p>
 
-<h3>Objective</h3>
-<p>Detect cookies set with <tt>Domain=.bank.in</tt> (or no specific domain restriction) on <code>*.bank.in</code> sites that could enable cross-bank tracking.</p>
+<table class="data-table">
+<tr><th>Domain</th><th>Cookies Found</th><th>Trackers Detected</th><th>.bank.in Wide Cookies</th></tr>
+<tr><td>sbi.bank.in</td><td>9</td><td>Session, GA4</td><td style="color:#080">✅ None</td></tr>
+<tr><td>hdfc.bank.in</td><td>0</td><td>None (initial load)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>icici.bank.in</td><td>15</td><td>Adobe (Analytics/Target/AAM), VWO</td><td style="color:#080">✅ None</td></tr>
+<tr><td>axis.bank.in</td><td>20</td><td>Adobe, CleverTap/WizRocket, Clarity, GTM, LinkedIn</td><td style="color:#080">✅ None</td></tr>
+<tr><td>kotak.bank.in</td><td>14</td><td>Adobe, Facebook Pixel, GTM</td><td style="color:#080">✅ None</td></tr>
+<tr><td>federal.bank.in</td><td>9</td><td>GA4, Facebook Pixel</td><td style="color:#080">✅ None</td></tr>
+<tr><td>indusind.bank.in</td><td>7</td><td>GA4, Facebook Pixel</td><td style="color:#080">✅ None</td></tr>
+<tr><td>idfcfirst.bank.in</td><td>9</td><td>VWO (A/B testing)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>bandhan.bank.in</td><td>7</td><td>GA4, Facebook Pixel</td><td style="color:#080">✅ None</td></tr>
+<tr><td>canarabank.bank.in</td><td>12</td><td>GA4, Load Balancer (AWS)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>au.bank.in</td><td>3</td><td>Cloudflare (bot/cookie challenge)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>yesbank.bank.in</td><td>—</td><td>DNS does not resolve</td><td style="color:#888">N/A</td></tr>
+<tr><td>pnbuat.bank.in</td><td>—</td><td>Invalid certificate (dev domain)</td><td style="color:#888">N/A</td></tr>
+</table>
 
-<h3>Methodology</h3>
+<div class="callout callout-green"><strong>Finding:</strong> <strong>Zero</strong> wide <tt>Domain=.bank.in</tt> cookies found across all tested domains. The PSL entry submitted by NIC.IN (Nov 2025) is working as intended on modern desktop browsers.</div>
+
+<h3>What about Kingsly's findings?</h3>
+<p>Kingsly found <tt>_iidt</tt>, <tt>_vid_t</tt>, and <tt>WZRK_S_...</tt> cookies scoped to <tt>.bank.in</tt> in Feb 2026 — 3 months after the PSL entry. Possible explanations:</p>
 <ol style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
-<li><strong>Visit a set of .bank.in domains</strong> — SBI, HDFC, ICICI, Axis, Kotak — in a browser with developer tools open</li>
-<li><strong>Inspect all cookies</strong> set during page load — especially those with <tt>Domain=.bank.in</tt> or no Domain attribute (which defaults to the host, but scripts can widen)</li>
-<li><strong>Check third-party requests</strong> — look for analytics pixels, tracking scripts, marketing platforms loading on banking pages</li>
-<li><strong>Check if third-party scripts use <tt>document.cookie</tt></strong> to set wide-scope cookies</li>
-<li><strong>Verify cross-bank leakage</strong> — clear bank-specific cookies, visit bank A, note cookies set, visit bank B, check if bank A's cookies appear in bank B's request headers</li>
+  <li><strong>Browser lag:</strong> Chrome/Edge/Firefox hadn't shipped the PSL update yet. PSL updates take 4-6 weeks to reach stable browser releases, and users on older versions may never receive them.</li>
+  <li><strong>Mobile WebView:</strong> Banking apps using embedded WebViews with ancient Chromium versions that don't receive PSL updates at all.</li>
+  <li><strong>The cookie was already scoped to the subdomain</strong> and Kingsly's observation was about what <em>could</em> happen, not the actual Domain attribute.</li>
 </ol>
 
-<h3>Cookie Names to Watch</h3>
+<h3>Key Insight: The tracker density is high but isolated</h3>
+<p>Every major bank has at least one marketing/analytics tracker on their .bank.in page. While cross-bank supercookies aren't currently active on desktop <em>because of the PSL</em>, the <strong>tracker ecosystem</strong> is primed for abuse if the PSL entry were missing or bypassed:</p>
 <ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
-<li><tt>WZRK_*</tt> — CleverTap/WizRocket (engagement platform, widely used in Indian fintech)</li>
-<li><tt>_iidt</tt> — device/visitor ID</li>
-<li><tt>_vid_t</tt> — visitor ID, timestamp-based</li>
-<li><tt>_ga</tt>, <tt>_gid</tt> — Google Analytics (common on bank websites)</li>
-<li><tt>_fbp</tt> — Facebook Pixel</li>
-<li><tt>ajs_*</tt> — Segment analytics</li>
-<li>Any cookie with <tt>Domain=.bank.in</tt> that is not a session-identifier specific to that one bank</li>
+  <li><strong>CleverTap/WizRocket</strong> (<tt>WZRK_*</tt> cookies) — used by Axis Bank. Loads from <tt>d2r1yp2w7bby2u.cloudfront.net</tt>. If CleverTap is also embedded on other .bank.in sites, the same visitor ID could be correlated.</li>
+  <li><strong>Adobe Audience Manager</strong> — used by Axis, ICICI, Kotak. Uses <tt>demdex.net</tt> third-party cookies for cross-site audience profiling. While these are not <tt>.bank.in</tt>-scoped, they <em>can</em> link banking behaviour across sites in Adobe's ecosystem.</li>
+  <li><strong>VWO (Visual Website Optimizer)</strong> — used by ICICI, IDFC First. A/B testing with visitor-level cookies.</li>
+  <li><strong>Facebook Pixel</strong> (<tt>_fbp</tt>) — used by Kotak, Federal, IndusInd, Bandhan. Links banking behaviour to Facebook user profiles for ad targeting.</li>
 </ul>
 
-<p><strong>Ready?</strong> This expedition is what we run together next — open the browser, walk through the top banks, and document what we find.</p>
+<h3>Expedition Methodology</h3>
+<ol style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+  <li>Open each <tt>*.bank.in</tt> domain in headless Chrome (agent-browser)</li>
+  <li>Wait for full page load (CSS/JS execution complete)</li>
+  <li>Dump all cookies with full metadata (domain, path, secure, httpOnly, sameSite)</li>
+  <li>Identify any cookie with <tt>Domain=.bank.in</tt> (not bank-specific subdomain)</li>
+  <li>Enumerate third-party scripts loaded from tracking/analytics domains</li>
+</ol>
+
+<p>The automated scanner script has been saved to the repository at <tt>scripts/scan_bankin_cookies.py</tt> for regular re-runs.</p>
 </section>
 
 <!-- Links -->
