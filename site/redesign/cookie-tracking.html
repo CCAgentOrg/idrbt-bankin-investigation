@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>.bank.in Cookie Tracking — CashlessConsumer</title>
+<meta name="description" content="How .bank.in becomes a cross-bank tracking surface."/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#f4efe6; --surface:#fffdf8; --surface-2:#faf6ed;
+  --ink:#1c1917; --ink-2:#44403c; --muted:#a8a29e;
+  --accent:#7f1d1d; --accent-2:#991b1b; --accent-surface:#fef2f2;
+  --border:#e7e0d4; --border-strong:#d6cdb8;
+  --green:#15803d; --amber:#b45309;
+  --serif:'Source Serif 4',Georgia,serif;
+  --display:'Fraunces',Georgia,serif;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.65;position:relative;min-height:100vh}
+/* paper grain */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:1}
+a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;text-decoration-color:var(--border-strong);transition:text-decoration-color .15s}
+a:hover{text-decoration-color:var(--accent)}
+tt,code{font-family:var(--mono);font-size:.84em;background:var(--surface-2);padding:1px 5px;border-radius:3px;color:var(--accent-2);border:1px solid var(--border)}
+pre{font-family:var(--mono)}
+
+/* ── Top bar ── */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(244,239,230,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-strong)}
+.topbar-inner{max-width:1100px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block}
+.lang-wrap{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.lang-wrap .lbl{font-family:var(--sans);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
+.lang-btn{font-family:var(--sans);font-size:11px;border:1px solid var(--border-strong);background:var(--surface);color:var(--ink-2);padding:3px 9px;border-radius:3px;cursor:pointer;transition:.12s}
+.lang-btn:hover{border-color:var(--accent);color:var(--accent)}
+.lang-active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.trans-banner{background:#fef3c7;border-bottom:1px solid #fcd34d;text-align:center;font-family:var(--sans);font-size:11px;padding:4px;color:#92400e;display:none}
+
+/* ── Layout ── */
+.page{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:2;display:grid;grid-template-columns:200px 1fr;gap:0}
+.toc{position:sticky;top:52px;align-self:start;height:calc(100vh - 52px);overflow-y:auto;padding:32px 20px 32px 0;border-right:1px solid var(--border)}
+.toc-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:600}
+.toc a{display:block;font-family:var(--sans);font-size:13px;color:var(--ink-2);padding:5px 0 5px 10px;border-left:2px solid transparent;text-decoration:none;transition:.12s;line-height:1.4}
+.toc a:hover{color:var(--accent);border-left-color:var(--border-strong)}
+.toc a.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.toc-sep{height:1px;background:var(--border);margin:14px 0}
+.toc-nav{display:flex;flex-direction:column;gap:2px}
+.toc-nav a{font-size:12px;color:var(--muted)}
+.content{max-width:680px;padding:48px 0 48px 48px}
+
+/* ── Hero ── */
+.hero{margin-bottom:48px;padding-bottom:36px;border-bottom:2px solid var(--ink);position:relative}
+.hero .stamp{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1.5px solid var(--accent);padding:3px 10px;border-radius:2px;margin-bottom:24px;transform:rotate(-1.5deg);background:var(--accent-surface)}
+.hero h1{font-family:var(--display);font-weight:600;font-size:clamp(1.9rem,4.5vw,2.6rem);line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-bottom:18px;font-optical-sizing:auto}
+.hero .dek{font-family:var(--serif);font-size:1.1rem;line-height:1.5;color:var(--ink-2);font-style:italic;margin-bottom:24px;max-width:560px}
+.hero .byline{font-family:var(--sans);font-size:13px;color:var(--muted);display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.hero .byline strong{color:var(--ink-2);font-weight:600}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--border-strong);border:1px solid var(--border-strong);border-radius:4px;overflow:hidden;margin:32px 0}
+.stat{background:var(--surface);padding:18px 16px;text-align:center}
+.stat .n{font-family:var(--display);font-weight:600;font-size:1.7rem;line-height:1;color:var(--accent);display:block;font-variant-numeric:tabular-nums}
+.stat .l{font-family:var(--sans);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block;line-height:1.3}
+
+/* ── Sections ── */
+section{margin-bottom:40px}
+section p{font-size:1.02rem;line-height:1.72;color:var(--ink);margin-bottom:18px}
+section p strong{color:var(--accent);font-weight:600}
+h2{font-family:var(--display);font-weight:600;font-size:1.5rem;line-height:1.2;color:var(--ink);margin:48px 0 16px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:14px}
+h2 .num{font-family:var(--mono);font-size:.8rem;font-weight:500;color:var(--accent);letter-spacing:.04em;flex-shrink:0}
+h2::after{content:'';flex:1;height:1px;background:var(--border-strong);align-self:center;margin-left:8px}
+h3{font-family:var(--sans);font-weight:600;font-size:.92rem;color:var(--ink);margin:28px 0 10px;letter-spacing:.01em;display:flex;align-items:center;gap:8px}
+h3 .marker{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0}
+
+/* ── Callout / Evidence ── */
+.callout,.evidence{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:18px 22px;margin:24px 0;border-radius:0 5px 5px 0;font-family:var(--serif);font-size:.96rem;line-height:1.6;color:var(--ink-2);box-shadow:0 1px 3px rgba(28,25,23,.04)}
+.callout strong,.evidence strong{color:var(--accent);font-weight:600}
+.callout-green,.insight-block{border-left-color:var(--green)}
+.callout-grey{border-left-color:var(--muted)}
+.callout-amber{border-left-color:var(--amber);background:#fffbeb}
+
+/* ── Finding cards ── */
+.finding{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 22px;margin:18px 0;box-shadow:0 1px 3px rgba(28,25,23,.05);position:relative;overflow:hidden}
+.finding::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+.finding .finding-title,.finding .ftitle{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:block}
+.finding .finding-text,.finding .ftext{font-family:var(--serif);font-size:.96rem;line-height:1.6;color:var(--ink)}
+.finding .finding-ref,.finding .fref{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:10px}
+
+/* ── Tables ── */
+.data-table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;margin:20px 0}
+.data-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--ink);font-family:var(--sans);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink)}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--ink-2);font-size:14px}
+.data-table tr:hover td{background:var(--surface-2)}
+.data-table .num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);color:var(--accent);font-weight:500}
+.data-table .yes{color:var(--green)}
+.data-table .no{color:var(--accent)}
+
+/* ── Timeline ── */
+.timeline-table{width:100%;border-collapse:collapse;font-family:var(--sans);margin:20px 0}
+.timeline-table th{text-align:left;padding:8px 14px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border-strong)}
+.timeline-table td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.timeline-table .t,.timeline-table .time{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--accent);white-space:nowrap;width:140px}
+
+/* ── Download ── */
+.dl-strip{margin:28px 0;display:flex;gap:12px;flex-wrap:wrap}
+.dl-strip a{font-family:var(--sans);font-size:14px;font-weight:500;background:var(--ink);color:#fff;padding:12px 22px;border-radius:4px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:.15s;border:1px solid var(--ink)}
+.dl-strip a:hover{background:var(--accent);border-color:var(--accent)}
+.dl-primary{background:var(--accent)!important;border-color:var(--accent)!important}
+
+/* ── Image ── */
+.compare-img{width:100%;border-radius:5px;border:1px solid var(--border-strong);margin:18px 0;box-shadow:0 2px 8px rgba(28,25,23,.08)}
+.compare-caption{font-family:var(--sans);font-size:12px;color:var(--muted);text-align:center;margin:-8px 0 20px;font-style:italic}
+
+/* ── Lists ── */
+ul,ol{margin:16px 0 16px 4px;padding-left:22px}
+li{font-size:1rem;line-height:1.7;color:var(--ink);margin-bottom:8px}
+li strong{color:var(--accent)}
+
+/* ── Diagram ── */
+.diagram-box,.kingsly-block{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:22px;margin:20px 0;box-shadow:0 1px 3px rgba(28,25,23,.04)}
+.diagram-box pre{font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--ink-2);white-space:pre-wrap}
+.kingsly-block .tweet,.kingsly-block .ktweet{font-family:var(--serif);font-size:1rem;color:var(--ink);margin-bottom:12px;line-height:1.6}
+.kingsly-block .attribution,.kingsly-block .kattr{font-family:var(--sans);font-size:12px;color:var(--muted)}
+.kingsly-block .cookies,.kingsly-block .kcookies{font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:12px 14px;margin:12px 0;color:var(--ink-2);line-height:1.7}
+.insight-block p{font-size:.96rem;margin:0}
+
+/* ── Nav / Footer ── */
+.nav-links,.links-row{display:flex;flex-wrap:wrap;gap:10px;margin:36px 0;padding-top:24px;border-top:1px solid var(--border-strong)}
+.nav-links a,.links-row a{font-family:var(--sans);font-size:13px;color:var(--ink-2);padding:8px 14px;border:1px solid var(--border-strong);border-radius:4px;text-decoration:none;transition:.12s;background:var(--surface)}
+.nav-links a:hover,.links-row a:hover{border-color:var(--accent);color:var(--accent)}
+.about-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:22px 24px;margin:28px 0}
+.about-box h3{font-family:var(--display);font-weight:600;font-size:1.1rem;margin-bottom:6px}
+.about-box p{font-family:var(--serif);font-size:.94rem;color:var(--ink-2);margin-bottom:6px}
+.about-box .ref{font-family:var(--sans);font-size:12px;color:var(--muted)}
+.report-footer,.footer{margin-top:48px;padding:24px 0;border-top:1px solid var(--border-strong);font-family:var(--sans);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer{padding:24px 0;text-align:center;color:var(--muted);font-family:var(--sans);font-size:11px}
+
+/* ── Entrance animation ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fadeUp .6s ease-out}
+.stats{animation:fadeUp .6s ease-out .1s both}
+section{animation:fadeUp .5s ease-out both}
+section:nth-child(1){animation-delay:.15s}
+section:nth-child(2){animation-delay:.2s}
+section:nth-child(3){animation-delay:.25s}
+
+/* ── Responsive ── */
+@media(max-width:860px){
+  .page{grid-template-columns:1fr;max-width:680px}
+  .toc{display:none}
+  .content{padding:32px 0}
+  .hero h1{font-size:1.7rem}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .content{padding:24px 0}
+  .stats{grid-template-columns:1fr}
+  .topbar-inner{padding:8px 16px}
+  .hero h1{font-size:1.5rem}
+  section p{font-size:.96rem}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+<div class="brand"><span class="dot"></span> CashlessConsumer · Security Investigation</div>
+<div class="lang-wrap">
+<span class="lbl">Lang</span>
+<button class="lang-btn lang-active" id="lang-en" onclick="setLang('en')">EN</button>
+<button class="lang-btn" id="lang-hi" onclick="setLang('hi')">हिं</button>
+<button class="lang-btn" id="lang-ta" onclick="setLang('ta')">த</button>
+<button class="lang-btn" id="lang-bn" onclick="setLang('bn')">বাং</button>
+<button class="lang-btn" id="lang-mr" onclick="setLang('mr')">म</button>
+<button class="lang-btn" id="lang-te" onclick="setLang('te')">తె</button>
+<button class="lang-btn" id="lang-gu" onclick="setLang('gu')">ગુ</button>
+<button class="lang-btn" id="lang-ur" onclick="setLang('ur')">اردو</button>
+<button class="lang-btn" id="lang-kn" onclick="setLang('kn')">ಕ</button>
+<button class="lang-btn" id="lang-ml" onclick="setLang('ml')">മ</button>
+</div>
+</div></div>
+<div class="trans-banner" id="tb">⚠️ AI-generated translation. English original is authoritative.</div>
+
+<div class="page">
+<nav class="toc">
+<div class="toc-label">Contents</div>
+<a href="#overview">Overview</a>
+<a href="#1-the-public-suffix-list-amp-cookie-isol">1. The Public Suffix List &amp; Cookie Isolation</a>
+<a href="#2-bank-in-on-the-psl-already-fixed-at-th">2. .bank.in on the PSL — Already Fixed at the Registry Level</a>
+<a href="#3-the-gap-that-remains-psl-updates-are-n">3. The Gap That Remains — PSL Updates Are Not Instant</a>
+<a href="#4-kingsly-s-discovery-feb-27-2026">4. Kingsly's Discovery — Feb 27, 2026</a>
+<a href="#5-theoretical-privacy-harms">5. Theoretical Privacy Harms</a>
+<a href="#6-trackers-observed-on-bank-in-sites">6. Trackers Observed on .bank.in Sites</a>
+<a href="#7-expedition-findings-live-scan-results">7. 🕵️ Expedition Findings — Live Scan Results (June 30, 2026)</a>
+
+<div class="toc-sep"></div>
+<div class="toc-nav">
+<a href="./">Main Investigation</a>
+<a href="./shutdown-critique.html">Shutdown Critique</a>
+
+</div>
+</nav>
+
+<div class="content">
+
+<div class="hero">
+<div class="stamp">Privacy & Tracking</div>
+<h1>.bank.in Supercookies: How India's Banking Domain Becomes a Cross-Bank Tracking Vector</h1>
+<div class="byline"><strong>CashlessConsumer</strong> · Security Desk · June 2026</div>
+</div>
+
+<section id="overview">
+<p>A domain suffix designed to be a trust anchor — telling citizens "this website is genuinely your bank" — can accidentally become a <strong>cross-bank tracking surface</strong> when the <em>browser</em> doesn't know that <code>sbi.bank.in</code> and <code>hdfc.bank.in</code> should be treated as separate sites.</p>
+
+<p>This page documents the browser cookie mechanics, the Public Suffix List fix that already exists, the gap that remains in practice, what Kingsly J discovered in Feb 2026, and an expedition plan to find real-world abuses.</p>
+
+<div class="callout"><strong>Status:</strong> <tt>.bank.in</tt> was added to the Public Suffix List in Nov 2025 (PR #2603 by NIC.IN). But this doesn't eliminate the risk — PSL updates propagate slowly to browsers, WebViews, and embedded browsers. Kingsly found cookies crossing bank boundaries as late as Feb 2026, 3+ months after the PSL entry.</div>
+</section>
+<section id="1-the-public-suffix-list-amp-cookie-isol">
+<h2>1. The Public Suffix List &amp; Cookie Isolation</h2>
+
+<p>The <a href="https://publicsuffix.org">Public Suffix List</a> (PSL) is a machine-readable catalogue that tells browsers which domain suffixes belong to a registry — so <code>cookie.example.co.uk</code> and <code>other.example.co.uk</code> can't read each other's cookies.</p>
+
+<p>Without a PSL entry for <code>bank.in</code>, the browser treats it as a "private domain":</p>
+
+<div class="diagram-box">
+<div class="diagram">
+<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:5px;padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted)">📊 Diagram: see source HTML</div>
+</div>
+</div>
+
+<p>The mechanic is simple: any cookie set with <tt>Domain=.bank.in</tt> by one bank will be sent to <em>every</em> <tt>*.bank.in</tt> domain the user visits. This means:</p>
+
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li>A <strong>session cookie</strong> set by SBI's site can be read by HDFC's site</li>
+<li>A <strong>tracking cookie</strong> (ad ID, analytics fingerprint) follows the user across every bank visit</li>
+<li>A <strong>malicious bank</strong> (or a compromised third-party script on any bank's page) can set cookies readable by all other banks</li>
+</ul>
+</section>
+<section id="2-bank-in-on-the-psl-already-fixed-at-th">
+<h2>2. .bank.in on the PSL — Already Fixed at the Registry Level</h2>
+
+<p>During our research for this page, we discovered that <code>bank.in</code> <strong>is already on the Public Suffix List</strong>.</p>
+
+<p>It was added via <a href="https://github.com/publicsuffix/list/pull/2603">PR #2603</a> — "add bank.in and fin.in to the public suffix list" — submitted by <strong>Gaurav Kansal (NIC.IN)</strong>, the <code>.in</code> registry operator, on <strong>2025-11-06</strong> and merged the same day by PSL maintainer Simon Friedberger.</p>
+
+<p>This was part of the broader update by NIXI/NIC.IN to bring all official <code>.in</code> second-level domains onto the PSL — covering <code>bank.in</code>, <code>fin.in</code>, <code>ac.in</code>, <code>gov.in</code>, <code>edu.in</code>, and others added in the same batch (PR #1588, then PR #2603).</p>
+
+<div class="callout callout-green"><strong>Answer to who can submit:</strong> NIC.IN, as the <code>.in</code> registry operator, already handled this. RBI/IDRBT are not the right party — the PSL submission is the <em>registry's</em> responsibility. The PSL submission was done by NIC.IN (the registry for .in), not RBI. So <strong>no PR is needed from us</strong> — it's done.</div>
+</section>
+<section id="3-the-gap-that-remains-psl-updates-are-n">
+<h2>3. The Gap That Remains — PSL Updates Are Not Instant</h2>
+
+<p>Adding <code>bank.in</code> to the PSL repository is necessary but not sufficient. Here's why the risk persists:</p>
+
+<h3>3a. Browser Release Cycles</h3>
+<p>The PSL is shipped with browser releases. Chromium fetches updates every ~4-6 weeks for Chrome; Firefox ships with each release (~4 weeks). Safari and mobile WebViews update on their own cadence. <strong>A user running a 3-month-old browser in Feb 2026 would not have the Nov 2025 PSL update.</strong></p>
+
+<h3>3b. Embedded Browsers &amp; WebViews</h3>
+<p>Many Indian apps — banking apps, UPI apps, fintech — use <strong>embedded WebViews</strong> to render bank pages. These WebViews often use a bundled Chromium WebView that may not receive PSL updates for months or years. An SBI YONO app WebView from early 2025 would <em>never</em> know about <code>bank.in</code> on the PSL.</p>
+
+<h3>3c. Third-Party Tracking Scripts</h3>
+<p>The most dangerous vector: if <strong>any</strong> .bank.in site loads a third-party script (analytics, ad network, fraud detection, support widget), that script can set <tt>Domain=.bank.in</tt> cookies. Since browsers without the PSL update see <code>bank.in</code> as a single "site," the third-party can correlate user behaviour across SBI, HDFC, ICICI, and all other banks.</p>
+
+</section>
+<section id="4-kingsly-s-discovery-feb-27-2026">
+<h2>4. Kingsly's Discovery — Feb 27, 2026</h2>
+
+<div class="kingsly-block">
+<div class="tweet">🧵 While browsing SBI in incognito, noticed cookies scoped to <tt>.bank.in</tt> appearing — specifically <tt>_iidt</tt>, <tt>_vid_t</tt>, and <tt>WZRK_S_...</tt>. The dot-prefix (<tt>.bank.in</tt> not <tt>sbi.bank.in</tt>) means these cookies are shared across ALL <tt>*.bank.in</tt> domains.</div>
+<div class="cookies">Set-Cookie: _iidt=abc123; Domain=.bank.in; Path=/; Max-Age=31536000<br/>Set-Cookie: _vid_t=xyz789; Domain=.bank.in; Path=/; Max-Age=31536000<br/>Set-Cookie: WZRK_S_...=...; Domain=.bank.in; Path=/; Max-Age=31536000</div>
+<div class="attribution">— <a href="https://x.com/kingslyj/status/2027359306820325393">@kingslyj, Feb 27, 2026</a></div>
+</div>
+
+<p>Kingsly's finding is significant because:</p>
+
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+<li><strong>The cookies existed 3+ months after PSL entry</strong> — meaning either the user's browser hadn't picked up the PSL update, or the site was still setting cookies in a way that assumed no PSL protection</li>
+<li><strong>Cookie naming suggests a tracker:</strong> <tt>_iidt</tt> and <tt>_vid_t</tt> follow the pattern of visitor ID / device ID cookies used by ad-tech and analytics platforms</li>
+<li><strong><tt>WZRK_S_...</tt></tt> is particularly suspicious</strong> — this naming convention matches <a href="https://www.wizrocket.com">WizRocket</a> (now part of CleverTap), a customer engagement and analytics platform widely used by Indian fintech companies</li>
+</ul>
+
+<div class="diagram-box">
+<div class="diagram">
+<pre style="font-size:.78rem;line-height:1.6;color:#555;text-align:left">
+USER visits sbi.bank.in
+    │
+    ├─ SBI page loads
+    │   └─ Third-party script (analytics/marketing) sets:
+    │      Set-Cookie: _iidt=abc123; Domain=.bank.in
+    │      Set-Cookie: _vid_t=xyz789; Domain=.bank.in
+    │      Set-Cookie: WZRK_S_...=...; Domain=.bank.in
+    │
+    └─ Cookie stored for .bank.in
+
+USER visits hdfc.bank.in (different bank, same browser)
+    │
+    └─ Browser sends ALL .bank.in cookies:
+       Cookie: _iidt=abc123; _vid_t=xyz789; WZRK_S_...=...
+       │
+       └─ HDFC page can now read these cookies via JS
+          └─ Third-party scripts on HDFC can correlate:
+             "Same visitor who was on sbi.bank.in"
+</pre>
+</div>
+</div>
+</section>
+<section id="5-theoretical-privacy-harms">
+<h2>5. Theoretical Privacy Harms</h2>
+
+<p>If a tracker successfully sets a <tt>.bank.in</tt>-scoped cookie, the following cross-bank profiling becomes possible:</p>
+
+<table class="data-table">
+<tr><th>Harm</th><th>How It Works</th><th>Severity</th></tr>
+<tr>
+  <td><strong>Cross-bank browsing profile</strong></td>
+  <td>A single visitor ID cookie links all your bank visits — SBI, HDFC, ICICI, Axis — into one profile</td>
+  <td style="color:#b00">High</td>
+</tr>
+<tr>
+  <td><strong>Fintech credit inference</strong></td>
+  <td>Visiting a bank known for personal loans → targeting you with debt products. Visiting multiple banks → tracked as "rate shopping"</td>
+  <td style="color:#b00">High</td>
+</tr>
+<tr>
+  <td><strong>Session hijacking surface</strong></td>
+  <td>If any bank's site has an XSS, the attacker can read cookies set by other banks — because they're all scoped to <tt>.bank.in</tt></td>
+  <td style="color:#b00">Critical</td>
+</tr>
+<tr>
+  <td><strong>Identity stitching</strong></td>
+  <td>Ad-tech platforms can correlate device fingerprints across banking sessions where the user is authenticated, linking demographic data to browsing behaviour</td>
+  <td style="color:#b00">High</td>
+</tr>
+<tr>
+  <td><strong>Competitive intelligence</strong></td>
+  <td>One bank can observe when a user browses a competitor's loan or credit card page — enabling real-time counter-offers in the same session</td>
+  <td style="color:#b00">Medium</td>
+</tr>
+<tr>
+  <td><strong>Fingerprinting amplification</strong></td>
+  <td>Cookies combined with canvas/WebGL fingerprinting from each bank page creates a richer, harder-to-evade cross-site fingerprint</td>
+  <td style="color:#b00">High</td>
+</tr>
+</table>
+
+<div class="callout"><strong>Important:</strong> These are <em>theoretical</em> harms at this stage. The point of the expedition below is to find evidence of actual abuse.</div>
+</section>
+<section id="6-trackers-observed-on-bank-in-sites">
+<h2>6. Trackers Observed on .bank.in Sites</h2>
+
+<p>Live scan of 13 domains revealed the following third-party tracking services actively running on .bank-in websites:</p>
+
+<table class="data-table">
+<tr><th>Tracker</th><th>Type</th><th>Banks Using It</th><th>Cookie</th></tr>
+<tr><td>Adobe Analytics / Audience Manager</td><td>Analytics, cross-site audience</td><td>ICICI, Axis, Kotak</td><td>AMCV_*, demdex.net (3rd-party)</td></tr>
+<tr><td>Google Analytics 4</td><td>Analytics</td><td>Most banks</td><td>_ga, _gid</td></tr>
+<tr><td>VWO (Visual Website Optimizer)</td><td>A/B testing, visitor tracking</td><td>ICICI, IDFC First</td><td>_vwo_uuid, _vis_opt_s</td></tr>
+<tr><td>WizRocket / CleverTap</td><td>Customer engagement, push</td><td>Axis</td><td>WZRK_S_*</td></tr>
+<tr><td>Facebook Pixel</td><td>Ad targeting</td><td>Kotak, Federal, IndusInd, Bandhan</td><td>_fbp</td></tr>
+<tr><td>Microsoft Clarity</td><td>Session recording, heatmaps</td><td>Axis</td><td>_clck, _clsk</td></tr>
+<tr><td>LinkedIn Insight Tag</td><td>B2B ad targeting</td><td>Axis</td><td>Third-party pixel</td></tr>
+<tr><td>Akamai Bot Manager</td><td>Bot detection (security)</td><td>ICICI</td><td>_abck, bm_sz</td></tr>
+</table>
+
+<p><strong>Key observation:</strong> Every single cookie from these trackers is scoped to the bank-specific subdomain (e.g. <tt>.axis.bank.in</tt>, <tt>.icici.bank.in</tt>), <em>not</em> the bare <tt>.bank.in</tt>. This confirms the PSL entry is doing its job on modern browsers.</p>
+</section>
+<section id="7-expedition-findings-live-scan-results">
+<h2>7. 🕵️ Expedition Findings — Live Scan Results (June 30, 2026)</h2>
+
+<p>We ran a systematic scan across <strong>13 major bank domains</strong> using agent-browser (Chrome-based headless browser):</p>
+
+<table class="data-table">
+<tr><th>Domain</th><th>Cookies Found</th><th>Trackers Detected</th><th>.bank.in Wide Cookies</th></tr>
+<tr><td>sbi.bank.in</td><td>9</td><td>Session, GA4</td><td style="color:#080">✅ None</td></tr>
+<tr><td>hdfc.bank.in</td><td>0</td><td>None (initial load)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>icici.bank.in</td><td>15</td><td>Adobe (Analytics/Target/AAM), VWO</td><td style="color:#080">✅ None</td></tr>
+<tr><td>axis.bank.in</td><td>20</td><td>Adobe, CleverTap/WizRocket, Clarity, GTM, LinkedIn</td><td style="color:#080">✅ None</td></tr>
+<tr><td>kotak.bank.in</td><td>14</td><td>Adobe, Facebook Pixel, GTM</td><td style="color:#080">✅ None</td></tr>
+<tr><td>federal.bank.in</td><td>9</td><td>GA4, Facebook Pixel</td><td style="color:#080">✅ None</td></tr>
+<tr><td>indusind.bank.in</td><td>7</td><td>GA4, Facebook Pixel</td><td style="color:#080">✅ None</td></tr>
+<tr><td>idfcfirst.bank.in</td><td>9</td><td>VWO (A/B testing)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>bandhan.bank.in</td><td>7</td><td>GA4, Facebook Pixel</td><td style="color:#080">✅ None</td></tr>
+<tr><td>canarabank.bank.in</td><td>12</td><td>GA4, Load Balancer (AWS)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>au.bank.in</td><td>3</td><td>Cloudflare (bot/cookie challenge)</td><td style="color:#080">✅ None</td></tr>
+<tr><td>yesbank.bank.in</td><td>—</td><td>DNS does not resolve</td><td style="color:#888">N/A</td></tr>
+<tr><td>pnbuat.bank.in</td><td>—</td><td>Invalid certificate (dev domain)</td><td style="color:#888">N/A</td></tr>
+</table>
+
+<div class="callout callout-green"><strong>Finding:</strong> <strong>Zero</strong> wide <tt>Domain=.bank.in</tt> cookies found across all tested domains. The PSL entry submitted by NIC.IN (Nov 2025) is working as intended on modern desktop browsers.</div>
+
+<h3>What about Kingsly's findings?</h3>
+<p>Kingsly found <tt>_iidt</tt>, <tt>_vid_t</tt>, and <tt>WZRK_S_...</tt> cookies scoped to <tt>.bank.in</tt> in Feb 2026 — 3 months after the PSL entry. Possible explanations:</p>
+<ol style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+  <li><strong>Browser lag:</strong> Chrome/Edge/Firefox hadn't shipped the PSL update yet. PSL updates take 4-6 weeks to reach stable browser releases, and users on older versions may never receive them.</li>
+  <li><strong>Mobile WebView:</strong> Banking apps using embedded WebViews with ancient Chromium versions that don't receive PSL updates at all.</li>
+  <li><strong>The cookie was already scoped to the subdomain</strong> and Kingsly's observation was about what <em>could</em> happen, not the actual Domain attribute.</li>
+</ol>
+
+<h3>Key Insight: The tracker density is high but isolated</h3>
+<p>Every major bank has at least one marketing/analytics tracker on their .bank.in page. While cross-bank supercookies aren't currently active on desktop <em>because of the PSL</em>, the <strong>tracker ecosystem</strong> is primed for abuse if the PSL entry were missing or bypassed:</p>
+<ul style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+  <li><strong>CleverTap/WizRocket</strong> (<tt>WZRK_*</tt> cookies) — used by Axis Bank. Loads from <tt>d2r1yp2w7bby2u.cloudfront.net</tt>. If CleverTap is also embedded on other .bank.in sites, the same visitor ID could be correlated.</li>
+  <li><strong>Adobe Audience Manager</strong> — used by Axis, ICICI, Kotak. Uses <tt>demdex.net</tt> third-party cookies for cross-site audience profiling. While these are not <tt>.bank.in</tt>-scoped, they <em>can</em> link banking behaviour across sites in Adobe's ecosystem.</li>
+  <li><strong>VWO (Visual Website Optimizer)</strong> — used by ICICI, IDFC First. A/B testing with visitor-level cookies.</li>
+  <li><strong>Facebook Pixel</strong> (<tt>_fbp</tt>) — used by Kotak, Federal, IndusInd, Bandhan. Links banking behaviour to Facebook user profiles for ad targeting.</li>
+</ul>
+
+<h3>Expedition Methodology</h3>
+<ol style="color:#444;font-size:.92rem;margin:12px 0 12px 24px;line-height:1.8">
+  <li>Open each <tt>*.bank.in</tt> domain in headless Chrome (agent-browser)</li>
+  <li>Wait for full page load (CSS/JS execution complete)</li>
+  <li>Dump all cookies with full metadata (domain, path, secure, httpOnly, sameSite)</li>
+  <li>Identify any cookie with <tt>Domain=.bank.in</tt> (not bank-specific subdomain)</li>
+  <li>Enumerate third-party scripts loaded from tracking/analytics domains</li>
+</ol>
+
+<p>The automated scanner script has been saved to the repository at <tt>scripts/scan_bankin_cookies.py</tt> for regular re-runs.</p>
+</section>
+
+<div class="about-box">
+<h3>CashlessConsumer</h3>
+<p>A consumer collective that tracks the digital payments industry in India, producing awareness resources, technical analysis, open data, and policy inputs toward a fair cashless society.</p>
+<div class="ref">Prior work: KillerLoanApps · BFIL Consent Scam · Fintech Governance RTI Program · <a href="https://cashlessconsumer.in">cashlessconsumer.in</a></div>
+</div>
+
+<div class="report-footer">
+<span>© June 2026 · CashlessConsumer · Published under responsible disclosure</span>
+<a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation">Source ↗</a>
+</div>
+
+</div>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mockup 2 — Research Report — .bank.in Investigation</title>
+<style>
+/* Reset */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+/* Base */
+body{background:#fff;color:#222;font:15px/1.65 -apple-system,"Helvetica Neue",Arial,sans-serif;display:flex}
+
+/* Sidebar TOC */
+.toc{position:sticky;top:0;width:240px;height:100vh;overflow-y:auto;background:#f8f6f4;border-right:1px solid #e0ddd8;padding:28px 20px;flex-shrink:0}
+.toc .label{font:.65rem/1;text-transform:uppercase;letter-spacing:.08em;color:#999;margin-bottom:16px;font-weight:600}
+.toc a{display:block;font:.78rem/1.5;color:#555;padding:5px 0;text-decoration:none;border-bottom:1px solid transparent;transition:.1s}
+.toc a:hover{color:#222;text-decoration:none}
+.toc a.active{color:#222;font-weight:600}
+.toc .sub{padding-left:14px;font-size:.74rem;color:#888}
+
+/* Main */
+.main{flex:1;max-width:740px;padding:40px 48px 60px;margin:0 auto}
+
+/* Header block */
+.report-header{margin-bottom:36px;padding-bottom:28px;border-bottom:2px solid #222}
+.report-header .ref{font:.7rem/1;-apple-system,sans-serif;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.report-header .ref em{font-style:normal;background:#222;color:#fff;padding:2px 8px;border-radius:2px;font-size:.65rem;letter-spacing:.04em;margin-right:6px}
+.report-header h1{font:1.65rem/1.3 -apple-system,sans-serif;font-weight:700;letter-spacing:-.01em;margin-bottom:10px}
+.report-header .meta{font:.8rem/1.5;color:#888;display:flex;gap:20px;flex-wrap:wrap}
+.report-header .meta dt{font-weight:600;color:#555;display:inline}
+.report-header .meta dd{display:inline;margin-right:16px}
+
+/* Sections */
+section{margin-bottom:32px}
+section p{margin-bottom:14px;color:#333;font-size:.92rem;line-height:1.7}
+section p strong{color:#c00}
+h2{font:1.15rem/1.3;font-weight:700;margin:32px 0 12px;padding-bottom:6px;border-bottom:1px solid #eee;color:#222}
+h2 .section-num{color:#c00;margin-right:6px}
+h3{font:.95rem/1.3;font-weight:600;margin:20px 0 8px;color:#333}
+
+/* Evidence callout */
+.evidence{background:#fafafa;border:1px solid #e0ddd8;border-left:3px solid #c00;padding:14px 18px;margin:16px 0;border-radius:0 4px 4px 0;font-size:.88rem;color:#555}
+
+/* Finding cards */
+.finding{background:#fff;border:1px solid #e0ddd8;border-radius:5px;padding:16px 18px;margin:14px 0}
+.finding .finding-title{font:.82rem/1.3;font-weight:600;color:#c00;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em;font-size:.7rem}
+.finding .finding-text{font:.88rem/1.5;color:#444}
+.finding .finding-ref{font:.72rem/1;color:#aaa;margin-top:6px}
+
+/* Tables */
+.data-table{width:100%;border-collapse:collapse;font:.82rem/1.4;margin:14px 0}
+.data-table th{text-align:left;padding:7px 10px;border-bottom:1px solid #222;color:#222;font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
+.data-table td{padding:7px 10px;border-bottom:1px solid #eee;color:#444}
+.data-table .num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Timeline */
+.timeline-table{width:100%;border-collapse:collapse;font:.82rem/1.4;margin:14px 0}
+.timeline-table th{text-align:left;padding:6px 10px;color:#888;font-weight:500;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #ddd}
+.timeline-table td{padding:6px 10px;border-bottom:1px solid #eee;color:#444;vertical-align:top}
+.timeline-table .time{font-weight:600;color:#222;white-space:nowrap;width:120px}
+
+/* Footer */
+.report-footer{margin-top:40px;padding-top:20px;border-top:1px solid #eee;font:.78rem/1.4;color:#999;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.report-footer a{color:#666}
+
+@media(max-width:900px){
+  body{display:block}
+  .toc{display:none}
+  .main{max-width:100%;padding:24px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar TOC -->
+<nav class="toc">
+<div class="label">Contents</div>
+<a href="#">Executive Summary</a>
+<a href="#" class="active">I. Background</a>
+<a href="#" class="sub">Mandate</a>
+<a href="#" class="sub">Portal</a>
+<a href="#">II. Security Claims vs Reality</a>
+<a href="#" class="sub">Claim #1 — Audit</a>
+<a href="#" class="sub">Claim #2 — Auth</a>
+<a href="#" class="sub">Claim #3 — Safeguards</a>
+<a href="#">III. Exposed Data</a>
+<a href="#">IV. Timeline</a>
+<a href="#">V. Systemic Gaps</a>
+<a href="#">VI. Recommendations</a>
+</nav>
+
+<!-- Main -->
+<div class="main">
+
+<div class="report-header">
+<div class="ref"><em>Security Investigation</em> · IDRBT .bank.in Portal</div>
+<h1>From Trust Mandate to Security Vulnerability</h1>
+<div class="meta">
+<dl><dt>Researcher: </dt><dd>CashlessConsumer</dd></dl>
+<dl><dt>Date: </dt><dd>June 28, 2026</dd></dl>
+<dl><dt>Status: </dt><dd>Fixed (CERT-In confirmed Jun 26)</dd></dl>
+<dl><dt>CERT-In: </dt><dd>#CERTIn-62780526</dd></dl>
+</div>
+</div>
+
+<!-- Summary -->
+<section>
+<h2><span class="section-num">00.</span> Executive Summary</h2>
+<p>RBI created <tt>.bank.in</tt> as a trust anchor — a domain suffix that tells citizens "this website is genuinely your bank." But the portal that issues these banking domains was built without a public tender, without a published security baseline, and without any vulnerability disclosure program. For over a year, it leaked every credential it held.</p>
+
+<div class="evidence"><strong>Key finding:</strong> The IDRBT Domain Registration Portal exposed 33+ unauthenticated API endpoints, leaking bcrypt password hashes, PII, and device fingerprints of 5,576 bank employees. The system meant to secure banking was itself the weakest link.</div>
+
+<p>The portal was built by <strong>IKCON Technologies</strong> in a single-source award — no tender, no RFP, no competitive process — in direct violation of IDRBT's own procurement handbook. IKCON held 22 employee accounts including 3 with global Super Admin access.</p>
+</section>
+
+<!-- Claims -->
+<section>
+<h2><span class="section-num">I.</span> Security Claims vs. Reality</h2>
+<p>IDRBT's published Privacy &amp; Security Policy makes specific claims about security auditing, authentication, and data protection. Our investigation found every claim to be false.</p>
+
+<div class="finding">
+<div class="finding-title">❌ Claim #1 — Audited for vulnerabilities</div>
+<div class="finding-text">The policy claims the site "was audited for known application-level vulnerabilities before the launch." Our investigation found 33+ unauthenticated API endpoints exposing user database, billing records, system config, and DSC proxy — a comprehensive failure no competent audit could have missed.</div>
+<div class="finding-ref">Source: registrar.idrbt.ac.in Privacy &amp; Security Policy</div>
+</div>
+
+<div class="finding">
+<div class="finding-title">❌ Claim #2 — Content is authenticated</div>
+<div class="finding-text">The policy states "Content is authenticated." Accessing every discovered endpoint required zero authentication — no login, no API key, no session cookie, no token.</div>
+</div>
+
+<div class="finding">
+<div class="finding-title">❌ Claim #3 — Procedural safeguards</div>
+<div class="finding-text">The policy pledges compliance with applicable laws. Exposing bcrypt password hashes and PII of 5,576 bank employees violates the Digital Personal Data Protection Act, 2023, and RBI's own cybersecurity framework (RBI/2023-24/90).</div>
+</div>
+
+<div class="evidence"><strong>Conclusion:</strong> IDRBT's published security policy is a work of fiction. Three specific claims made to the public were verifiably false at the time of investigation.</div>
+</section>
+
+<!-- Data -->
+<section>
+<h2><span class="section-num">II.</span> Exposed Data</h2>
+<table class="data-table">
+<tr><th>Dataset</th><th>Records</th><th>Status</th></tr>
+<tr><td>Registered .bank.in domains</td><td class="num">1,497</td><td>Published (open data)</td></tr>
+<tr><td>Domains with active NS</td><td class="num">1,402</td><td>Published</td></tr>
+<tr><td>Domains without NS</td><td class="num">95</td><td>Published</td></tr>
+<tr><td>Billing records (anonymized)</td><td class="num">1,535</td><td>Published</td></tr>
+<tr><td>CT log entries</td><td class="num">3,797</td><td>Published</td></tr>
+<tr><td>User records (PII/hashes)</td><td class="num">5,461</td><td>Not published</td></tr>
+<tr><td>Orphan Super Admin records</td><td class="num">1,072</td><td>Not published</td></tr>
+</table>
+</section>
+
+<!-- Timeline -->
+<section>
+<h2><span class="section-num">III.</span> Timeline</h2>
+<table class="timeline-table">
+<tr><th>Date</th><th>Event</th><th>Details</th></tr>
+<tr><td class="time">Jun 8 · 05:07 UTC</td><td>Discovery</td><td>/api/dr/user/all found during OSINT scan</td></tr>
+<tr><td class="time">05:30 UTC</td><td>Reported</td><td>Filed with incident@cert-in.org.in</td></tr>
+<tr><td class="time">07:30 UTC</td><td>Extended enumeration</td><td>Orphan users, DSC proxy, config endpoints</td></tr>
+<tr><td class="time">Jun 8</td><td>Acknowledged</td><td>CERT-In confirms receipt</td></tr>
+<tr><td class="time">Jun 25</td><td>Fix deployed</td><td>IDRBT adds authentication gate</td></tr>
+<tr><td class="time">Jun 26</td><td>Confirmed fixed</td><td>CERT-In verifies</td></tr>
+</table>
+<p style="font:.78rem;color:#888;margin-top:8px">18 days from report to fix — for a trivial auth-gate change.</p>
+</section>
+
+<!-- Footer -->
+<div class="report-footer">
+<span>© June 2026 · CashlessConsumer</span>
+<span>
+<a href="https://github.com/CCAgentOrg/idrbt-bankin-investigation">Source Code</a> ·
+<a href="/shutdown-critique.html">Shutdown Critique</a> ·
+<a href="/cookie-tracking.html">Cookie Analysis</a> ·
+<a href="/">Current Site</a>
+</span>
+</div>
+
+</div>
+
+</body>
+</html>
